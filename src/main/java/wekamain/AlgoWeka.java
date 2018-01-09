@@ -4,9 +4,8 @@ import java.util.Random;
 
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
-import weka.classifiers.bayes.NaiveBayesUpdateable;
+import weka.classifiers.functions.SMO;
 import weka.classifiers.trees.J48;
-import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 import weka.core.converters.ArffSaver;
@@ -34,14 +33,13 @@ public class AlgoWeka {
 		data.setClassIndex(data.numAttributes() - 1);
 
 				 
-		//Make tree
+		//Make tree J48
 		J48 tree = new J48();
 		String[] options = new String[1];
 		options[0] = "-U"; 
 		tree.setOptions(options);
 		tree.buildClassifier(data);
 
-		//Print tree
 		System.out.println(tree);
 		
 		
@@ -55,9 +53,30 @@ public class AlgoWeka {
 		 System.out.println(eval.toClassDetailsString());
 
 		 
-		 
+		//Make tree NaiveBayes
 		 NaiveBayes cModel = new NaiveBayes();
 		 cModel.buildClassifier(data);
+		 
+		 System.out.println(cModel);
+		 
+		 NaiveBayes nb = new NaiveBayes();
+		 eval.crossValidateModel(nb, data, folds, rand);
+		 
+		 System.out.println(eval.toSummaryString());
+		 System.out.println(eval.toClassDetailsString());
+		 
+		 
+		//Make tree SMO
+		 SMO smo = new SMO();
+		 smo.buildClassifier(data);
+		
+		 System.out.println(smo);
+		 
+		 SMO smoo = new SMO();
+		 eval.crossValidateModel(smoo, data, folds, rand);
+		 
+		 System.out.println(eval.toSummaryString());
+		 System.out.println(eval.toClassDetailsString());
 	}
 
 }
