@@ -22,7 +22,7 @@ public class AlgoSparkml {
 	    SparkConf sparkConf = new SparkConf().setAppName("AlgoSparkml").setMaster("local");
 	    JavaSparkContext jsc = new JavaSparkContext(sparkConf);
 	    // Load and parse the data file.
-	    String datapath = "data/mllib/sample_libsvm_data.txt";
+	    String datapath = "src/main/resources/iris.csv";
 	    JavaRDD<LabeledPoint> data = MLUtils.loadLibSVMFile(jsc.sc(), datapath).toJavaRDD();
 	    // Split the data into training and test sets (30% held out for testing)
 	    JavaRDD<LabeledPoint>[] splits = data.randomSplit(new double[]{0.7, 0.3});

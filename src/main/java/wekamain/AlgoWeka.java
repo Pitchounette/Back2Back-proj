@@ -1,7 +1,12 @@
 package wekamain;
 import java.io.File;
+import java.util.Random;
 
+import weka.classifiers.Evaluation;
+import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.bayes.NaiveBayesUpdateable;
 import weka.classifiers.trees.J48;
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 import weka.core.converters.ArffSaver;
@@ -28,6 +33,7 @@ public class AlgoWeka {
 
 		data.setClassIndex(data.numAttributes() - 1);
 
+				 
 		//Make tree
 		J48 tree = new J48();
 		String[] options = new String[1];
@@ -37,8 +43,21 @@ public class AlgoWeka {
 
 		//Print tree
 		System.out.println(tree);
+		
+		
+		 J48 cls = new J48();
+		 Evaluation eval = new Evaluation(data);
+		 Random rand = new Random(1);  // using seed = 1
+		 int folds = 10;
+		 eval.crossValidateModel(cls, data, folds, rand);
+		 
+		 System.out.println(eval.toSummaryString());
+		 System.out.println(eval.toClassDetailsString());
 
-
+		 
+		 
+		 NaiveBayes cModel = new NaiveBayes();
+		 cModel.buildClassifier(data);
 	}
 
 }
