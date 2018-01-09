@@ -7,6 +7,8 @@
   <version>0.0.1-SNAPSHOT</version>
   
   <!-- https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-dev -->
+<!-- https://mvnrepository.com/artifact/org.apache.spark/spark-mllib -->
+<!-- https://mvnrepository.com/artifact/org.apache.spark/spark-sql -->
 
 <dependencies>
 <dependency>
@@ -14,7 +16,23 @@
     <artifactId>weka-dev</artifactId>
     <version>3.7.5</version>
 </dependency>
+
+<dependency>
+    <groupId>org.apache.spark</groupId>
+    <artifactId>spark-mllib_2.11</artifactId>
+    <version>2.2.1</version>
+</dependency>
+
+
+<dependency>
+    <groupId>org.apache.spark</groupId>
+    <artifactId>spark-sql_2.11</artifactId>
+    <version>2.2.1</version>
+</dependency>
+
+
 </dependencies>
 </project>
+
 
 
