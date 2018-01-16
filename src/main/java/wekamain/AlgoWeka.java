@@ -44,18 +44,22 @@ public class AlgoWeka {
 		tree.buildClassifier(data);
 
 		System.out.println(tree);
-		
-		
+		Evaluation eval = new Evaluation(trainData);
+		eval.evaluateModel(tree, trainData);
+		System.out.println("1-NN accuracy on training data:\n" + eval.pctCorrect()/100);
+		eval.evaluateModel(tree, testData);
+		System.out.println("1-NN accuracy on separate test data:\n" + eval.pctCorrect()/100);
+		/*
 		 J48 cls = new J48();
 		 Evaluation eval = new Evaluation(data);
-		 Random rand = new Random(1);  // using seed = 1
-		 int folds = 10;
+		 
 		 eval.crossValidateModel(cls, data, folds, rand);
 		 
 		 System.out.println(eval.toSummaryString());
 		 System.out.println(eval.toClassDetailsString());
-
-		 
+		 */
+		 Random rand = new Random(1);  // using seed = 1
+		 int folds = 10;
 		//Make tree NaiveBayes
 		 NaiveBayes cModel = new NaiveBayes();
 		 cModel.buildClassifier(data);
