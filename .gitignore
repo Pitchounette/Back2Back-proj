@@ -1,1 +1,4 @@
 /target/
+.Rproj.user
+/.RData
+/.Rhistory
