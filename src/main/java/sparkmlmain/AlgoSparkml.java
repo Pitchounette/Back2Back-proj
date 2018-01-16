@@ -3,54 +3,66 @@ package sparkmlmain;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.parquet.io.RecordReader;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.mllib.regression.LabeledPoint;
 import org.apache.spark.mllib.tree.DecisionTree;
 import org.apache.spark.mllib.tree.model.DecisionTreeModel;
 import org.apache.spark.mllib.util.MLUtils;
-
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SQLContext;
 import scala.Tuple2;
+import org.apache.spark.SparkConf;
 
 
-public class AlgoSparkml {
+
+class AlgoSparkml {
 
 	public static void main(String[] args) {
 		
-	    SparkConf sparkConf = new SparkConf().setAppName("AlgoSparkml").setMaster("local");
-	    JavaSparkContext jsc = new JavaSparkContext(sparkConf);
-	    // Load and parse the data file.
-	    String datapath = "src/main/resources/iris.csv";
-	    JavaRDD<LabeledPoint> data = MLUtils.loadLibSVMFile(jsc.sc(), datapath).toJavaRDD();
-	    // Split the data into training and test sets (30% held out for testing)
-	    JavaRDD<LabeledPoint>[] splits = data.randomSplit(new double[]{0.7, 0.3});
-	    JavaRDD<LabeledPoint> trainingData = splits[0];
-	    JavaRDD<LabeledPoint> testData = splits[1];
+		//Configuration of Spark
+		SparkConf sparkConf = new SparkConf().setAppName("DecisionTreeExample").setMaster("local[2]").set("spark.executor.memory","1g");;
+		
+		// Start the Spark Context
+		JavaSparkContext jsc = new JavaSparkContext(sparkConf);
 
-	    // Set parameters.
-	    //  Empty categoricalFeaturesInfo indicates all features are continuous.
-	    int numClasses = 2;
-	    Map<Integer, Integer> categoricalFeaturesInfo = new HashMap<Integer,Integer>();
-	    String impurity = "gini";
-	    int maxDepth = 5;
-	    int maxBins = 32;
+			
+		// provide path to data transformed as [feature vectors]
+		String path = "src/main/resources/iris.csv";
+		JavaRDD inputData = jsc.textFile(path);
 
-	    // Train a DecisionTree model for classification.
-	    DecisionTreeModel model = DecisionTree.trainClassifier(trainingData, numClasses,
-	      categoricalFeaturesInfo, impurity, maxDepth, maxBins);
 
-	    // Evaluate model on test instances and compute test error
-	    JavaPairRDD<Double, Double> predictionAndLabel =
-	      testData.mapToPair(p -> new Tuple2<>(model.predict(p.features()), p.label()));
-	    double testErr =
-	      predictionAndLabel.filter(pl -> !pl._1().equals(pl._2())).count() / (double) testData.count();
+		// split the data for training (60%) and testing (40%)
+		JavaRDD[] tmp = inputData.randomSplit(new double[]{0.6, 0.4});
+		JavaRDD trainingData = tmp[0]; // training set
+		JavaRDD testData = tmp[1]; // test set
+		System.out.println(inputData.first());
+		
+		
 
-	    System.out.println("Test Error: " + testErr);
-	    System.out.println("Learned classification tree model:\n" + model.toDebugString());
 
-	    jsc.close();
+		
+		// Define parameters
+		int numClasses = 2;
+		Map<Integer, Integer> categoricalFeaturesInfo = new HashMap();
+		categoricalFeaturesInfo.put(4, 2);
+		String impurity = "gini";
+		int maxDepth = 5;
+		int maxBins = 32;
+		
+		// Creation of the tree
+		DecisionTreeModel model = DecisionTree.trainClassifier(trainingData, numClasses,
+		          categoricalFeaturesInfo, impurity, maxDepth, maxBins);
+		
+	
+		
+		
+
 	}
 
 }
