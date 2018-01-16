@@ -14,13 +14,31 @@ public class AlgoRenjin {
 	
 	engine.eval(new java.io.FileReader("src/main/resources/scriptR.R"));
 	
+	
+	// arbre de classification
+	
 	engine.put("repertoire", "src/main/resources/statsFSEVary.csv");
-	engine.put("y", 19);
+	engine.put("indY", 19);
 	engine.put("splitRatio", 0.7);
-	engine.put("minBucket", 20);
-	Vector accuracyVector = (Vector)engine.eval("arbre_classification(repertoire,y, splitRatio, minBucket)");
+	engine.put("minBucket", 200);
+	engine.put("transform", true);
+	Vector accuracyVector = (Vector)engine.eval("arbre_classification(repertoire,indY, splitRatio, minBucket,transform)");
 	double accuracy = accuracyVector.getElementAsDouble(0);
 	System.out.println(accuracy);
+	
+	
+	//Random Forest
+	
+	engine.put("repertoire", "src/main/resources/statsFSEVary.csv");
+	engine.put("indY", 19);
+	engine.put("ntree", 3);
+	engine.put("mtry", 2);
+	engine.put("transform", true);
+	accuracyVector = (Vector)engine.eval("foret_aléatoire(repertoire, indY, ntree, mtry, transform)");
+	accuracy = accuracyVector.getElementAsDouble(0);
+	System.out.println(accuracy);
+	
+	
 
 	
 	}
