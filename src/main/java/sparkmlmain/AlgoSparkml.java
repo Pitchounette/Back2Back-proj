@@ -3,8 +3,6 @@ package sparkmlmain;
 import java.util.HashMap;
 import java.util.Map;
 
-import scala.Tuple2;
-
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
@@ -13,6 +11,8 @@ import org.apache.spark.mllib.regression.LabeledPoint;
 import org.apache.spark.mllib.tree.DecisionTree;
 import org.apache.spark.mllib.tree.model.DecisionTreeModel;
 import org.apache.spark.mllib.util.MLUtils;
+
+import scala.Tuple2;
 
 
 public class AlgoSparkml {
@@ -32,7 +32,7 @@ public class AlgoSparkml {
 	    // Set parameters.
 	    //  Empty categoricalFeaturesInfo indicates all features are continuous.
 	    int numClasses = 2;
-	    Map<Integer, Integer> categoricalFeaturesInfo = new HashMap<>();
+	    Map<Integer, Integer> categoricalFeaturesInfo = new HashMap<Integer,Integer>();
 	    String impurity = "gini";
 	    int maxDepth = 5;
 	    int maxBins = 32;
