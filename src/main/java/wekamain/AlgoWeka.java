@@ -16,26 +16,27 @@ public class AlgoWeka {
 	public static void main(String[] args) throws Exception {
 		// load CSV
 		CSVLoader csvloader = new CSVLoader();
-		csvloader.setSource(new File("src/main/resources/iris.csv"));
+		csvloader.setSource(new File("src/main/resources/statsFSEVary.csv"));
 		Instances csvdata = csvloader.getDataSet();
 
 		// save ARFF
 		ArffSaver saver = new ArffSaver();
 		saver.setInstances(csvdata);
-		saver.setFile(new File("src/main/resources/iris.arff"));
-		saver.setDestination(new File("src/main/resources/iris.arff"));
+		saver.setFile(new File("src/main/resources/statsFSEVary.arff"));
+		saver.setDestination(new File("src/main/resources/statsFSEVary.arff"));
 		saver.writeBatch();
 
 
 		ArffLoader loader= new ArffLoader();
-		loader.setSource(new File("src/main/resources/iris.arff"));
+		loader.setSource(new File("src/main/resources/statsFSEVary.arff"));
 		Instances data= loader.getDataSet();
-
-		data.setClassIndex(data.numAttributes() - 1);
+		data.setClassIndex(18);
 		data.randomize(new java.util.Random());	// randomize instance order before splitting dataset
 		Instances trainData = data.trainCV(2, 0);
 		Instances testData = data.testCV(2, 0);
-				 
+		
+		System.out.println(testData);
+			 
 		//Make tree J48
 		J48 tree = new J48();
 		String[] options = new String[1];
@@ -48,15 +49,12 @@ public class AlgoWeka {
 		System.out.println("1-NN accuracy on training data:\n" + eval.pctCorrect()/100);
 		eval.evaluateModel(tree, testData);
 		System.out.println("1-NN accuracy on separate test data:\n" + eval.pctCorrect()/100);
-		/*
+		
 		 J48 cls = new J48();
-		 Evaluation eval = new Evaluation(data);
-		 
-		 eval.crossValidateModel(cls, data, folds, rand);
+	
 		 
 		 System.out.println(eval.toSummaryString());
 		 System.out.println(eval.toClassDetailsString());
-		 */
 		 
 		//Make tree NaiveBayes
 		 NaiveBayes cModel = new NaiveBayes();
