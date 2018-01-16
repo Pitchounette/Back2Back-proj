@@ -6,6 +6,7 @@ import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.functions.SMO;
 import weka.classifiers.trees.J48;
+import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 import weka.core.converters.ArffSaver;
@@ -31,7 +32,9 @@ public class AlgoWeka {
 		Instances data= loader.getDataSet();
 
 		data.setClassIndex(data.numAttributes() - 1);
-
+		data.randomize(new java.util.Random());	// randomize instance order before splitting dataset
+		Instances trainData = data.trainCV(2, 0);
+		Instances testData = data.testCV(2, 0);
 				 
 		//Make tree J48
 		J48 tree = new J48();
@@ -74,6 +77,20 @@ public class AlgoWeka {
 		 
 		 SMO smoo = new SMO();
 		 eval.crossValidateModel(smoo, data, folds, rand);
+		 
+		 System.out.println(eval.toSummaryString());
+		 System.out.println(eval.toClassDetailsString());
+		 
+		 
+		//Make tree Random Forest
+		 RandomForest rf = new RandomForest();
+		 rf.setNumTrees(100);
+		 rf.buildClassifier(data);
+		
+		 System.out.println(rf);
+		 
+		 RandomForest rff = new RandomForest();
+		 eval.crossValidateModel(rff, data, folds, rand);
 		 
 		 System.out.println(eval.toSummaryString());
 		 System.out.println(eval.toClassDetailsString());
