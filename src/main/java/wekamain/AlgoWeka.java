@@ -19,24 +19,25 @@ public class AlgoWeka {
 		csvloader.setSource(new File("src/main/resources/iris.csv"));
 		Instances csvdata = csvloader.getDataSet();
 
-		// save ARFF
+		// Convert the CSV into a ARFF
 		ArffSaver saver = new ArffSaver();
 		saver.setInstances(csvdata);
 		saver.setFile(new File("src/main/resources/iris.arff"));
 		saver.setDestination(new File("src/main/resources/iris.arff"));
 		saver.writeBatch();
 
-
+		// Load the ARFF files
 		ArffLoader loader= new ArffLoader();
 		loader.setSource(new File("src/main/resources/iris.arff"));
 		Instances data= loader.getDataSet();
 
+		
 		data.setClassIndex(data.numAttributes() - 1);
 		data.randomize(new java.util.Random());	// randomize instance order before splitting dataset
 		Instances trainData = data.trainCV(2, 0);
 		Instances testData = data.testCV(2, 0);
 				 
-		//Make tree J48
+		//Make a tree (type J48)
 		J48 tree = new J48();
 		String[] options = new String[1];
 		options[0] = "-U"; 
