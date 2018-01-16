@@ -14,8 +14,8 @@ public class AlgoRenjin {
 	
 	engine.eval(new java.io.FileReader("src/main/resources/scriptR.R"));
 	
-	engine.put("repertoire", "src/main/resources/iris.csv");
-	engine.put("y", "Species");
+	engine.put("repertoire", "src/main/resources/statsFSEVary.csv");
+	engine.put("y", 19);
 	engine.put("splitRatio", 0.7);
 	engine.put("minBucket", 20);
 	Vector accuracyVector = (Vector)engine.eval("arbre_classification(repertoire,y, splitRatio, minBucket)");
