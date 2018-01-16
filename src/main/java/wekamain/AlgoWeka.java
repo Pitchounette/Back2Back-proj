@@ -41,9 +41,8 @@ public class AlgoWeka {
 		String[] options = new String[1];
 		options[0] = "-U"; 
 		tree.setOptions(options);
-		tree.buildClassifier(data);
+		tree.buildClassifier(trainData);
 
-		System.out.println(tree);
 		Evaluation eval = new Evaluation(trainData);
 		eval.evaluateModel(tree, trainData);
 		System.out.println("1-NN accuracy on training data:\n" + eval.pctCorrect()/100);
@@ -58,46 +57,36 @@ public class AlgoWeka {
 		 System.out.println(eval.toSummaryString());
 		 System.out.println(eval.toClassDetailsString());
 		 */
-		 Random rand = new Random(1);  // using seed = 1
-		 int folds = 10;
+		 
 		//Make tree NaiveBayes
 		 NaiveBayes cModel = new NaiveBayes();
-		 cModel.buildClassifier(data);
+		 cModel.buildClassifier(trainData);
 		 
-		 System.out.println(cModel);
-		 
-		 NaiveBayes nb = new NaiveBayes();
-		 eval.crossValidateModel(nb, data, folds, rand);
-		 
-		 System.out.println(eval.toSummaryString());
-		 System.out.println(eval.toClassDetailsString());
-		 
-		 
+		 eval.evaluateModel(cModel, trainData);
+		 System.out.println("1-NN accuracy on training data:\n" + eval.pctCorrect()/100);
+		 eval.evaluateModel(cModel, testData);
+		 System.out.println("1-NN accuracy on separate test data:\n" + eval.pctCorrect()/100);
+
 		//Make tree SMO
 		 SMO smo = new SMO();
-		 smo.buildClassifier(data);
-		
-		 System.out.println(smo);
-		 
-		 SMO smoo = new SMO();
-		 eval.crossValidateModel(smoo, data, folds, rand);
-		 
-		 System.out.println(eval.toSummaryString());
-		 System.out.println(eval.toClassDetailsString());
-		 
+		 smo.buildClassifier(trainData);
+	 
+		 eval.evaluateModel(smo, trainData);
+		 System.out.println("1-NN accuracy on training data:\n" + eval.pctCorrect()/100);
+		 eval.evaluateModel(smo, testData);
+		 System.out.println("1-NN accuracy on separate test data:\n" + eval.pctCorrect()/100);
+
 		 
 		//Make tree Random Forest
 		 RandomForest rf = new RandomForest();
 		 rf.setNumTrees(100);
-		 rf.buildClassifier(data);
-		
-		 System.out.println(rf);
-		 
-		 RandomForest rff = new RandomForest();
-		 eval.crossValidateModel(rff, data, folds, rand);
-		 
-		 System.out.println(eval.toSummaryString());
-		 System.out.println(eval.toClassDetailsString());
+		 rf.buildClassifier(trainData);
+	
+		 eval.evaluateModel(rf, trainData);
+		 System.out.println("1-NN accuracy on training data:\n" + eval.pctCorrect()/100);
+		 eval.evaluateModel(rf, testData);
+		 System.out.println("1-NN accuracy on separate test data:\n" + eval.pctCorrect()/100);
+
 	}
 
 }
