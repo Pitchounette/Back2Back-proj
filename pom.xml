@@ -5,7 +5,7 @@
   <groupId>fr.ensai</groupId>
   <artifactId>Back2Back-proj</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  
+ 
   <!-- https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-dev -->
 <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-mllib -->
 <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-sql -->
@@ -49,6 +49,7 @@
   	</dependency>
 
 
+
 <dependency>
     <groupId>org.apache.spark</groupId>
     <artifactId>spark-sql_2.11</artifactId>
@@ -58,6 +59,7 @@
 
 </dependencies>
 <repositories>
+
   	<repository>
 	    <id>bedatadriven</id>
 	    <name>bedatadriven public repo</name>
@@ -65,3 +67,4 @@
   	</repository>
 </repositories>
 </project>
+
