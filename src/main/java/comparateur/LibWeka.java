@@ -14,21 +14,21 @@ import weka.core.converters.CSVLoader;
 
 public class LibWeka {
 
-	public Instances importData() throws IOException {
+	public Instances importData(String path, String name) throws IOException {
 		CSVLoader csvloader = new CSVLoader();
-		csvloader.setSource(new File("src/main/resources/iris.csv"));
+		csvloader.setSource(new File(path+name+".csv"));
 		Instances csvdata = csvloader.getDataSet();
 
 		// save ARFF
 		ArffSaver saver = new ArffSaver();
 		saver.setInstances(csvdata);
-		saver.setFile(new File("src/main/resources/iris.arff"));
-		saver.setDestination(new File("src/main/resources/iris.arff"));
+		saver.setFile(new File(path+name+".arff"));
+		saver.setDestination(new File(path+name+".arff"));
 		saver.writeBatch();
 
 
 		ArffLoader loader= new ArffLoader();
-		loader.setSource(new File("src/main/resources/iris.arff"));
+		loader.setSource(new File(path+name+".arff"));
 		Instances data= loader.getDataSet();
 		
 		return data;

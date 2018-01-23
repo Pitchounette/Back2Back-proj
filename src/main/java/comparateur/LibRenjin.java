@@ -24,12 +24,5 @@ public class LibRenjin {
 		double accuracy = accuracyVector.getElementAsDouble(0);
 		return accuracy;
 	}
-/*
-		
-*/
-		
-		
-
-	
 
 }
