@@ -2,9 +2,12 @@ package libraries;
 
 import java.io.File;
 
+import tools.SplitCSV;
+import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.trees.J48;
+import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.core.converters.CSVLoader;
 import weka.filters.Filter;
@@ -58,9 +61,16 @@ public class LibWeka {
 		return tree;
 	}
 	
-	public double accuracy(J48 tree) throws Exception {
+	public RandomForest randomForest() throws Exception {
+		RandomForest tree = new RandomForest();
 		
-
+		tree.buildClassifier(this.train);
+		
+		return tree;
+	}
+	
+	public double accuracy(Classifier tree) throws Exception {
+		
 		Evaluation eval = new Evaluation(this.train);
 		eval.evaluateModel(tree, this.test);
 
@@ -68,17 +78,15 @@ public class LibWeka {
 	}
 	
 	
-	public double nbAccuracy(Instances trainData, Instances testData) throws Exception {
-		NaiveBayes cModel = new NaiveBayes();
-		
-		cModel.buildClassifier(trainData);
-		 
-		Evaluation eval = new Evaluation(trainData);
-		eval.evaluateModel(cModel, testData);
-		
-		return eval.pctCorrect()/100;
-	}
 	
+	public static void main(String[] args) throws Exception {
+		LibWeka weka = new LibWeka("src/main/resources/","iris", true);
+		J48 tree = weka.decisionTree();
+		System.out.println(weka.accuracy(tree));
+		
+		RandomForest rf = weka.randomForest();
+		System.out.println(weka.accuracy(rf));
+	}
 	
 
 }
