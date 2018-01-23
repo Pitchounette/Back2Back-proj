@@ -27,5 +27,14 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/home/frmat/.m2/repository/org/apache/spark/spark-sql_2.11/2.2.1/spark-sql_2.11-2.2.1.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.spark"/>
+			<attribute name="maven.artifactId" value="spark-sql_2.11"/>
+			<attribute name="maven.version" value="2.2.1"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
