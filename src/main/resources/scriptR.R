@@ -5,18 +5,14 @@ library(randomForest)
 #library(caTools)
 
 
-arbre_classification = function(repertoire, indY,splitRatio=0.7, minbucket=10, transform){
-  fichier = read.csv(repertoire, header=TRUE)
-  if (!is.factor(fichier[,indY]) & transform){
-    fichier[,indY] =  as.factor(fichier[,indY])
+arbre_classification = function(repertoireTrain, repertoireTrain, indY,splitRatio=0.7, minbucket=10, transform){
+  train.fichier = read.csv(repertoireTrain, header=TRUE)
+  test.fichier = read.csv(repertoireTest, header=TRUE)
+  if (!is.factor(train.fichier[,indY]) & transform){
+    train.fichier[,indY] =  as.factor(train.fichier[,indY])
+    test.fichier[,indY] =  as.factor(test.fichier[,indY])
   }
-  nameY = names(fichier)[indY]
-  
-  long = nrow(fichier)
-  longTrain = round(long*splitRatio)
-  indTrain = sample(1:long, longTrain)
-  train.fichier = fichier[indTrain,]
-  test.fichier = fichier[-indTrain,]
+  nameY = names(train.fichier)[indY]
   
   set.seed(runif(1,0,1000))
   
@@ -32,18 +28,14 @@ arbre_classification = function(repertoire, indY,splitRatio=0.7, minbucket=10, t
   return(accuracy)
 }
 
-foret_aléatoire = function(repertoire, indY, ntree, mtry, transform){
-  fichier = read.csv(repertoire, header=TRUE)
-  if (!is.factor(fichier[,indY]) & transform){
-    fichier[indY] =  as.factor(fichier[,indY])
+foret_aléatoire = function(repertoireTrain,repertoireTest, indY, ntree, mtry, transform){
+  train.fichier = read.csv(repertoireTrain, header=TRUE)
+  test.fichier = read.csv(repertoireTest, header=TRUE)
+  if (!is.factor(train.fichier[,indY]) & transform){
+    train.fichier[,indY] =  as.factor(train.fichier[,indY])
+    test.fichier[,indY] =  as.factor(test.fichier[,indY])
   }
   nameY = names(fichier)[indY]
-
-  long = nrow(fichier)
-  longTrain = round(long*splitRatio)
-  indTrain = sample(1:long, longTrain)
-  train.fichier = fichier[indTrain,]
-  test.fichier = fichier[-indTrain,]
 
   set.seed(runif(1,0,1000))
 
