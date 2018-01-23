@@ -1,4 +1,4 @@
-package comparateur;
+package tools;
 
 import java.util.Scanner;
 
