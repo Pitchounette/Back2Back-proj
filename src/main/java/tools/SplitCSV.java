@@ -13,13 +13,14 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 public class SplitCSV {
 	private String path;
+	private String name;
 	private File file;
 	List<String[]> dataTable = new ArrayList<String[]>();
 	
-	public SplitCSV(String path) {
+	public SplitCSV(String path,String name) {
 		this.path = path;
-		
-		this.file = new File(path);
+		this.name = name;
+		this.file = new File(path+name+".csv");
 	}
 	
 	public void importData(File file) throws IOException {
@@ -40,14 +41,14 @@ public class SplitCSV {
 		
 		List<String[]> train = dataTable.subList(0, nbrtrain); 
 		train.add(0, header);
-		String trainFile = "src/main/resources/train.csv";
+		String trainFile = this.path+"train_"+this.name+".csv";
 		CSVWriter writerTrain = new CSVWriter(new FileWriter(trainFile));
         writerTrain.writeAll(train);
         writerTrain.close();
 		
         List<String[]> test = dataTable.subList(nbrtrain+1, dataTable.size());
 		test.add(0,header);
-		String testFile = "src/main/resources/test.csv";
+		String testFile = this.path+"test_"+this.name+".csv";
 		CSVWriter writerTest = new CSVWriter(new FileWriter(testFile));
         writerTest.writeAll(test);
         writerTest.close();
@@ -59,7 +60,7 @@ public class SplitCSV {
 		
 		
 	public static void main(String[] args) throws Exception {
-		SplitCSV csv = new SplitCSV("src/main/resources/iris.csv");
+		SplitCSV csv = new SplitCSV("src/main/resources/","iris");
 		csv.importData(csv.file);
 		csv.splitCSV(0.7);
 	}
