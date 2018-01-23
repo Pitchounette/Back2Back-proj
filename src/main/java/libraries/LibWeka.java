@@ -68,7 +68,6 @@ public class LibWeka {
 	}
 	
 	
-	
 	public double nbAccuracy(Instances trainData, Instances testData) throws Exception {
 		NaiveBayes cModel = new NaiveBayes();
 		
