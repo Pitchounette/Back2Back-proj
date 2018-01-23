@@ -1,29 +1,21 @@
 package libraries;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.trees.J48;
 import weka.core.Instances;
-import weka.core.converters.ArffLoader;
-import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
 
 public class LibWeka {
-	
-	private String path;
-	private String name;
+
 	private Instances train;
 	private Instances test;
 	
 	public LibWeka(String path,String name, boolean header) throws Exception {
-		this.path = path;
-		this.name = name;
 		
 		File fileTrain = new File(path+"train_"+name+".csv");
 		CSVLoader loaderTrain = new CSVLoader();
@@ -54,7 +46,7 @@ public class LibWeka {
 		}
 	}
 	
-	public J48 DecisionTree() throws Exception {
+	public J48 decisionTree() throws Exception {
 		J48 tree = new J48();
 		
 		String[] options = new String[1];
@@ -66,7 +58,7 @@ public class LibWeka {
 		return tree;
 	}
 	
-	public double Accuracy(J48 tree) throws Exception {
+	public double accuracy(J48 tree) throws Exception {
 		
 
 		Evaluation eval = new Evaluation(this.train);
@@ -77,7 +69,7 @@ public class LibWeka {
 	
 	
 	
-	public double NBaccuracy(Instances trainData, Instances testData) throws Exception {
+	public double nbAccuracy(Instances trainData, Instances testData) throws Exception {
 		NaiveBayes cModel = new NaiveBayes();
 		
 		cModel.buildClassifier(trainData);
@@ -89,9 +81,5 @@ public class LibWeka {
 	}
 	
 	
-	public void accuracy(String methode, ArrayList param ) {
-		
-	}
-	
-	
+
 }
