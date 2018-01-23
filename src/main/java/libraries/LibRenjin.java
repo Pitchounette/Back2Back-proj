@@ -1,4 +1,4 @@
-package comparateur;
+package libraries;
 
 import java.io.FileNotFoundException;
 

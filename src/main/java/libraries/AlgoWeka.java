@@ -1,40 +1,53 @@
-package wekamain;
+package libraries;
 import java.io.File;
 import weka.classifiers.Evaluation;
-import weka.classifiers.bayes.NaiveBayes;
-import weka.classifiers.functions.SMO;
 import weka.classifiers.trees.J48;
-import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
-import weka.core.converters.ArffLoader;
-import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Remove;
 public class AlgoWeka {
 
 	public static void main(String[] args) throws Exception {
 		// load CSV
 		CSVLoader csvloader = new CSVLoader();
-		csvloader.setSource(new File("src/main/resources/statsFSEVary.csv"));
-		Instances csvdata = csvloader.getDataSet();
-
-		// save ARFF
-		ArffSaver saver = new ArffSaver();
-		saver.setInstances(csvdata);
-		saver.setFile(new File("src/main/resources/statsFSEVary.arff"));
-		saver.setDestination(new File("src/main/resources/statsFSEVary.arff"));
-		saver.writeBatch();
-
-
-		ArffLoader loader= new ArffLoader();
-		loader.setSource(new File("src/main/resources/statsFSEVary.arff"));
-		Instances data= loader.getDataSet();
-		data.setClassIndex(18);
-		data.randomize(new java.util.Random());	// randomize instance order before splitting dataset
-		Instances trainData = data.trainCV(2, 0);
-		Instances testData = data.testCV(2, 0);
+		csvloader.setSource(new File("src/main/resources/iris.csv"));
+		Instances data = csvloader.getDataSet();
+		data.setClassIndex(data.numAttributes() - 1);
+		data.randomize(new java.util.Random(0));
 		
-		System.out.println(testData);
-			 
+		int trainSize = (int) Math.round(data.numInstances() * 0.7);
+		int testSize = data.numInstances() - trainSize;
+		Instances train = new Instances(data, 0, trainSize);
+		Instances test = new Instances(data, trainSize, testSize);
+		
+
+	
+		
+		if (true){
+			String[] options = new String[2];
+			 options[0] = "-R";                                   
+			 options[1] = "1";                                 
+			 Remove remove = new Remove();                         
+			 remove.setOptions(options);                           
+			 remove.setInputFormat(data);                       
+			 data = Filter.useFilter(data, remove);  
+		}
+		
+		
+		
+		J48 model = new J48();
+		
+		model.buildClassifier(train);	
+
+		Evaluation eval = new Evaluation(train);
+		
+		eval.evaluateModel(model, test);
+		System.out.println(model);
+		
+		System.out.println(eval.toSummaryString("\nResults\n======\n", false));
+		
+	/*		 
 		//Make tree J48
 		J48 tree = new J48();
 		String[] options = new String[1];
@@ -82,7 +95,7 @@ public class AlgoWeka {
 		 System.out.println("1-NN accuracy on training data:\n" + eval.pctCorrect()/100);
 		 eval.evaluateModel(rf, testData);
 		 System.out.println("1-NN accuracy on separate test data:\n" + eval.pctCorrect()/100);
-
+*/
 	}
 
 }
