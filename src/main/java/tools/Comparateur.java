@@ -2,21 +2,27 @@ package tools;
 
 import java.util.Scanner;
 
+import libraries.Library;
+
 public class Comparateur {
-	private Librairy lib1;
-	private Librairy lib2;
+	private Library lib1;
+	private Library lib2;
 	
-	public Comparateur(Librairy lib1,Librairy lib2) {
+	public Comparateur(Library lib1,Library lib2) {
 		this.lib1 = lib1;
 		this.lib2 = lib2;
 	}
-	public void Compare() {
-		// TO DO : Implementer compare pour quelle calcule la valeur de test sur les deux librairy et les stockes au choix
-	}
+	
 	public String getResult() {
-		// TO DO : Implementer get Result pour quelle renvoie un string contenant les resultats
+		Double resLib1 = lib1.getAccuracy();
+		Double resLib2 = lib2.getAccuracy();
+		return("Library 1 = "+resLib1+" vs Library 2 = " + resLib2);
 	}
 	
+	
+	/*
+	 * 
+	 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 
@@ -28,5 +34,5 @@ public class Comparateur {
 
 
 	}
-
+	*/
 }
