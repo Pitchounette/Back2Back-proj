@@ -11,19 +11,37 @@ import java.util.List;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
+
+/*
+ * Split CSV is a data structure that is used to have the same learning and test set when we compare different methods
+ */
+
 public class SplitCSV {
-	private String path;
-	private String name;
-	private File file;
-	List<String[]> dataTable = new ArrayList<String[]>();
 	
-	public SplitCSV(String path,String name) {
+	private String path; // Path of the dataset to be split
+	private File file; 
+	private String name;
+	List<String[]> dataTable = new ArrayList<String[]>(); // The full dataset
+	
+	// Constructor of the class that import the dataset at the position path and split it
+	public SplitCSV(String path,String name) throws IOException {
 		this.path = path;
 		this.name = name;
-		this.file = new File(path+name+".csv");
+		this.file = new File(path);
+		this.importData();
+		this.splitCSV(0.7);
 	}
 	
-	public void importData(File file) throws IOException {
+	public String getTrainingPath() {
+		return("src/main/resources/train_"+this.name+".csv");
+	}
+	
+	public String getTestingPath() {
+		return("src/main/resources/test_"+this.name+".csv");
+	}
+	
+	// Import the data set 
+	public void importData() throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(this.file));
 		                
 		String line = null; 
@@ -32,7 +50,9 @@ public class SplitCSV {
 			this.dataTable.add(values); 
 		}
 	}
-		
+	
+	
+	// Split the csv into 2 new csv files, a training one and a testing one
 	public void splitCSV(double pourc) throws IOException  {
 		String[] header = dataTable.remove(0);
 		Collections.shuffle(this.dataTable);
@@ -41,14 +61,14 @@ public class SplitCSV {
 		
 		List<String[]> train = dataTable.subList(0, nbrtrain); 
 		train.add(0, header);
-		String trainFile = this.path+"train_"+this.name+".csv";
+		String trainFile = "src/main/resources/train_"+this.name+".csv";
 		CSVWriter writerTrain = new CSVWriter(new FileWriter(trainFile));
         writerTrain.writeAll(train);
         writerTrain.close();
 		
         List<String[]> test = dataTable.subList(nbrtrain+1, dataTable.size());
 		test.add(0,header);
-		String testFile = this.path+"test_"+this.name+".csv";
+		String testFile = "src/main/resources/test_"+this.name+".csv";
 		CSVWriter writerTest = new CSVWriter(new FileWriter(testFile));
         writerTest.writeAll(test);
         writerTest.close();
@@ -58,10 +78,11 @@ public class SplitCSV {
     }
 				
 		
-		
+	/*
 	public static void main(String[] args) throws Exception {
-		SplitCSV csv = new SplitCSV("src/main/resources/","iris");
-		csv.importData(csv.file);
-		csv.splitCSV(0.7);
+		SplitCSV csv = new SplitCSV("src/main/resources/iris.csv","iris");
 	}
+	*/
+	
+	
 }
