@@ -18,6 +18,7 @@ public class Lanceur {
 		String pathData = "src/main/resources/iris.csv";
 		SplitCSV dataSplit = new SplitCSV(pathData, "iris");
 		//Library sparkML = new SparkMLLib(dataSplit,"Arbre");
+<<<<<<< HEAD
 		Library rEngin = new Library(dataSplit,"Arbre");
 		Comparateur comparateur = new Comparateur(rEngin,rEngin);
 		System.out.println(comparateur.getResult());
@@ -25,3 +26,12 @@ public class Lanceur {
 	}
 
 }
+=======
+		Library rEngin = new WekaLib(dataSplit,"Arbre");
+		Comparateur comparateur = new Comparateur(rEngin,rEngin);
+		System.out.println(comparateur.getResult());
+
+	}
+
+}
+>>>>>>> branch 'master' of https://github.com/Pitchounette/Back2Back-proj.git

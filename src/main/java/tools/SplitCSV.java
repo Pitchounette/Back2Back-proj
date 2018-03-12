@@ -85,4 +85,8 @@ public class SplitCSV {
 	*/
 	
 	
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> branch 'master' of https://github.com/Pitchounette/Back2Back-proj.git
