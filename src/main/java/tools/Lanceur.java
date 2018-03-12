@@ -17,9 +17,9 @@ public class Lanceur {
 		// CHoix des données 
 		String pathData = "src/main/resources/iris.csv";
 		SplitCSV dataSplit = new SplitCSV(pathData, "iris");
-		//Library sparkML = new SparkMLLib(dataSplit,"Arbre");
+		Library sparkML = new SparkMLLib(dataSplit,"Arbre");
 		Library rEngin = new WekaLib(dataSplit,"Arbre");
-		Comparateur comparateur = new Comparateur(rEngin,rEngin);
+		Comparateur comparateur = new Comparateur(sparkML,sparkML);
 		System.out.println(comparateur.getResult());
 
 	}

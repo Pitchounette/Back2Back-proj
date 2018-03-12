@@ -32,7 +32,7 @@ import org.apache.spark.SparkConf;
 
 
 
-public class AlgoSparkML {
+public class AlgoSparkML implements java.io.Serializable{
 
 	private JavaRDD<LabeledPoint> dataTest;
 	private JavaRDD<LabeledPoint> dataTrain;
@@ -70,29 +70,28 @@ public class AlgoSparkML {
 		// Transform the JavaRDD<Row> into a JavaRDD<LabelPoint>
 		// To do so he reads each line as a string and parse in the appropriate way
 		// TO DO : For now he does not find the label of the data!! (The result category)
-		@SuppressWarnings("serial")
-		JavaRDD<LabeledPoint> dataTest = testDataInput.map(new Function<Row,
+		this.dataTest = testDataInput.map(new Function<Row,
 				LabeledPoint>() {
 				             public LabeledPoint call(Row line) throws Exception {
 				                String lineAsString=line.toString();
 				                lineAsString = lineAsString.replace("[","");
 				                lineAsString = lineAsString.replace("]","");
 				                String[] fields =lineAsString.split(",");
+				       
 				                double[] res = new double[fields.length];
-				                for(int i =0;i < fields.length;i++) {
+				                for(int i =0;i < fields.length-1;i++) {
 				                	
 				                	res[i] = (Double.parseDouble(fields[i]));
 				                }
-				                		
+				                
 				                LabeledPoint labeledPoint = new
-				LabeledPoint(Integer.valueOf(0),
-				Vectors.dense(res));
+				LabeledPoint(res[fields.length-1],
+				Vectors.dense(1.0,2.0,3.0));
 				                return labeledPoint;
 				            }
 				        });
 
-		@SuppressWarnings("serial")
-		JavaRDD<LabeledPoint> dataTrain = trainDataInput.map(new Function<Row,
+		this.dataTrain = trainDataInput.map(new Function<Row,
 				LabeledPoint>() {
 				             public LabeledPoint call(Row line) throws Exception {
 				                String lineAsString=line.toString();
@@ -100,16 +99,17 @@ public class AlgoSparkML {
 				                lineAsString = lineAsString.replace("]","");
 				                String[] fields =lineAsString.split(",");
 				                double[] res = new double[fields.length];
-				                for(int i =0;i < fields.length;i++) {
+				                for(int i =0;i < fields.length-1;i++) {
 				                	
 				                	res[i] = (Double.parseDouble(fields[i]));
 				                }
-				                		
+				                
 				                LabeledPoint labeledPoint = new
-				LabeledPoint(Integer.valueOf(0),
-				Vectors.dense(res));
+				LabeledPoint(res[fields.length-1],
+				Vectors.dense(1.0,2.0,3.0));
 				                return labeledPoint;
-				            }
+				             }
+				            
 				        });
 		/* Some test to see if everythings is allright
 		System.out.println(inputData.first());
@@ -123,7 +123,8 @@ public class AlgoSparkML {
 	public double getResultTree() {
 		// Define parameters
 		int numClasses = 2; // Number of category
-		Map<Integer, Integer> categoricalFeaturesInfo = new HashMap(); // Indicate if there is any categorial variable
+		Map<Integer, Integer> categoricalFeaturesInfo = new HashMap();// Indicate if there is any categorial variable
+		categoricalFeaturesInfo.put(4,3);
 		String impurity = "gini";
 		int maxDepth = 5; // Max depth of the tree
 		int maxBins = 32; // Do not change for now
