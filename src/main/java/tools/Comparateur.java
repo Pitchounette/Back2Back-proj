@@ -25,20 +25,10 @@ public class Comparateur {
 	 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-<<<<<<< HEAD
 		System.out.println("Veuillez saisir un mot :");
 		String str = sc.nextLine();
 		System.out.println("Vous avez saisi : " + str);
-=======
 
-		System.out.println("Veuillez saisir un mot :");
-
-		String str = sc.nextLine();
-
-		System.out.println("Vous avez saisi : " + str);
-
-
->>>>>>> branch 'master' of https://github.com/Pitchounette/Back2Back-proj.git
 	}
 	*/
 }

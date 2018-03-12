@@ -83,10 +83,5 @@ public class SplitCSV {
 		SplitCSV csv = new SplitCSV("src/main/resources/iris.csv","iris");
 	}
 	*/
-	
-	
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> branch 'master' of https://github.com/Pitchounette/Back2Back-proj.git
