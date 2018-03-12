@@ -1,4 +1,4 @@
-package libraries;
+package librariesMethods;
 
 import java.io.File;
 
@@ -18,15 +18,15 @@ public class LibWeka {
 	private Instances train;
 	private Instances test;
 	
-	public LibWeka(String path,String name, boolean header) throws Exception {
+	public LibWeka(String testPath,String trainPath, boolean header) throws Exception {
 		
-		File fileTrain = new File(path+"train_"+name+".csv");
+		File fileTrain = new File(trainPath);
 		CSVLoader loaderTrain = new CSVLoader();
 		loaderTrain.setSource(fileTrain);
 		this.train = loaderTrain.getDataSet();
 		this.train.setClassIndex(this.train.numAttributes() - 1);
 		
-		File fileTest = new File(path+"test_"+name+".csv");
+		File fileTest = new File(testPath);
 		CSVLoader loaderTest = new CSVLoader();
 		loaderTest.setSource(fileTest);
 		this.test = loaderTest.getDataSet();
@@ -57,7 +57,6 @@ public class LibWeka {
 		tree.setOptions(options);
 		
 		tree.buildClassifier(this.train);
-		
 		return tree;
 	}
 	
