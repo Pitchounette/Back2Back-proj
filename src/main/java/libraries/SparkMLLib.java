@@ -84,14 +84,15 @@ public class SparkMLLib extends Library{
 		createCategories(header.length);
 		for(int i =0; i < header.length;i++) {
 			this.findCategories(dataTable,i); // We are looking for the categories Y
-			System.out.println(categories.get(i));
+			
 		}
 		
-		for(int i=0;i<dataTable.size();i++) {
-
-
-			dataTable.get(i)[dataTable.get(i).length-1] = String.valueOf((double) 1+categories.get(dataTable.get(i).length-1).indexOf(dataTable.get(i)[dataTable.get(i).length-1]));
-
+		for(int col =0; col< header.length;col++) {
+			if(categories.get(col).size() < 4) {
+				for(int i=0;i<dataTable.size();i++) {
+						dataTable.get(i)[col] = String.valueOf((double) 1+categories.get(col).indexOf(dataTable.get(i)[col]));
+				}
+			}
 		}
 
 

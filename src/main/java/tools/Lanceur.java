@@ -16,7 +16,7 @@ public class Lanceur {
 
 	public static void main(String[] args) throws IOException {
 		// CHoix des données 
-		String pathData = "src/main/resources/iris.csv";
+		String pathData = "src/main/resources/statsFSEVarFry.csv";
 		SplitCSV dataSplit = new SplitCSV(pathData, "iris");
 		HashMap argumentsLib1 = new HashMap<String,String>();
 		argumentsLib1.put("maxDepth", "1");
