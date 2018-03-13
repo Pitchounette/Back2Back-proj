@@ -21,8 +21,8 @@ public class Lanceur {
 		Library sparkML = new SparkMLLib(dataSplit,"Arbre");
 
 
-		Library rEngin = new WekaLib(dataSplit,"Arbre");
-		Comparateur comparateur = new Comparateur(sparkML,sparkML);
+		Library Weka = new WekaLib(dataSplit,"Arbre");
+		Comparateur comparateur = new Comparateur(Weka,sparkML);
 		System.out.println(comparateur.getResult());
 
 	}

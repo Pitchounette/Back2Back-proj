@@ -78,18 +78,18 @@ public class AlgoSparkML implements java.io.Serializable{
 				                lineAsString = lineAsString.replace("]","");
 				                String[] fields =lineAsString.split(",");
 				       
-				                double[] res = new double[fields.length];
+				                double[] res = new double[fields.length-1];
 				                for(int i =0;i < fields.length-1;i++) {
 				                	
 				                	res[i] = (Double.parseDouble(fields[i]));
 				                }
-				                
+
 				                LabeledPoint labeledPoint = new
-				LabeledPoint(res[fields.length-1],
-				Vectors.dense(1.0,2.0,3.0));
+				                		LabeledPoint((Double.parseDouble(fields[fields.length-1])),
+				                				Vectors.dense(res));
 				                return labeledPoint;
-				            }
-				        });
+				             }
+		});
 
 		this.dataTrain = trainDataInput.map(new Function<Row,
 				LabeledPoint>() {
@@ -98,35 +98,34 @@ public class AlgoSparkML implements java.io.Serializable{
 				                lineAsString = lineAsString.replace("[","");
 				                lineAsString = lineAsString.replace("]","");
 				                String[] fields =lineAsString.split(",");
-				                double[] res = new double[fields.length];
+				                double[] res = new double[fields.length-1];
 				                for(int i =0;i < fields.length-1;i++) {
 				                	
 				                	res[i] = (Double.parseDouble(fields[i]));
 				                }
 				                
 				                LabeledPoint labeledPoint = new
-				LabeledPoint(res[fields.length-1],
-				Vectors.dense(1.0,2.0,3.0));
+				LabeledPoint((Double.parseDouble(fields[fields.length-1])),
+				Vectors.dense(res));
 				                return labeledPoint;
 				             }
 				            
 				        });
-		/* Some test to see if everythings is allright
-		System.out.println(inputData.first());
-		System.out.println(inputData.first().toString());
-		System.out.println(dataLabeledPoints.first());
-		*/
+		/* Some test to see if everythings is allright*/
+		System.out.println(trainDataInput.first());
+		System.out.println(trainDataInput.first().toString());
+		System.out.println(dataTrain.first());
+		
 
 		
 	}
 	
 	public double getResultTree() {
 		// Define parameters
-		int numClasses = 2; // Number of category
+		int numClasses = 4; // Number of category
 		Map<Integer, Integer> categoricalFeaturesInfo = new HashMap();// Indicate if there is any categorial variable
-		categoricalFeaturesInfo.put(4,3);
 		String impurity = "gini";
-		int maxDepth = 5; // Max depth of the tree
+		int maxDepth = 10; // Max depth of the tree
 		int maxBins = 32; // Do not change for now
 		
 		// Creation of the tree
@@ -137,6 +136,8 @@ public class AlgoSparkML implements java.io.Serializable{
 		JavaPairRDD<Double, Double> predictionAndLabel =
 		        dataTest.mapToPair(p -> new Tuple2<>(model.predict(((LabeledPoint) p).features()), ((LabeledPoint) p).label()));
 		// calculate the accuracy
+		
+		System.out.println(model.toDebugString());
 		double accuracy =
 		        predictionAndLabel.filter(pl -> pl._1().equals(pl._2())).count() / (double) dataTest.count();
 		 
