@@ -10,86 +10,122 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import librariesMethods.AlgoSparkML;
 
 public class SparkMLLib extends Library{
 	private AlgoSparkML sparkMl;
-	private ArrayList<String> categories ;
-	static private String[] array = {"DecisionTree","RandomForest"};
+	private HashMap<Integer,ArrayList<String>> categories ;
+	private boolean categoriesCreated = false;
+	private Map<String,String> args;
+	static private String[] array = {"DecisionTree","RandomForest","SVM"};
 	static public ArrayList<String> allowedMethods = new ArrayList<String>(Arrays.asList(array)) ;
-	
+
 	public SparkMLLib(SplitCSV data, String methode) throws IOException {
 		super(data, methode);
-		
-		categories = new ArrayList<String>();
+		args = new HashMap<String,String>();
+		categories = new HashMap<Integer,ArrayList<String>>();
+
+		// Chemin des fichiers dédié à SparkMl
+		String testFile = "src/main/resources/test_spark.csv";
+		String trainFile = "src/main/resources/train_spark.csv";
+
+		/* On va modifier les tables csv pour convenir au format Pour test et train notamment transformer la variable catégoriel d'interet en 1.0,2.0,3.0*/
+
+		transformColumn(data.getTestingPath(),testFile);
+		transformColumn(data.getTrainingPath(),trainFile);
+
+		sparkMl = new AlgoSparkML(testFile,trainFile,categories.size());
+
+
+	}
+	public SparkMLLib(SplitCSV data, String methode,Map<String,String> args) throws IOException {
+		super(data, methode);
+		this.args = args;
+		categories = new HashMap<Integer,ArrayList<String>>();
 		
 		// Chemin des fichiers dédié à SparkMl
 		String testFile = "src/main/resources/test_spark.csv";
 		String trainFile = "src/main/resources/train_spark.csv";
-		
+
 		/* On va modifier les tables csv pour convenir au format Pour test et train notamment transformer la variable catégoriel d'interet en 1.0,2.0,3.0*/
-		
-		transformLastColumn(data.getTestingPath(),testFile);
-		transformLastColumn(data.getTrainingPath(),trainFile);
-		
-		sparkMl = new AlgoSparkML(testFile,trainFile);
-		
-		
+
+		transformColumn(data.getTestingPath(),testFile);
+		transformColumn(data.getTrainingPath(),trainFile);
+
+		sparkMl = new AlgoSparkML(testFile,trainFile,categories.size());
+
+
 	}
+	
 
 	// Write a new csv file that contain the same information that the one at pathIn but change the last colum
 	// By transforming the categorial variable into 1.0,2.0,3.0 ...
-	
-	private void transformLastColumn(String pathIn, String pathOut) throws IOException {
+
+	private void transformColumn(String pathIn, String pathOut) throws IOException {
 		File file = new File(pathIn);
 		List<String[]> dataTable = new ArrayList<String[]>();
 		BufferedReader reader = new BufferedReader(new FileReader(file));
-		
+
 		String line = null; 
 		while ((line = reader.readLine()) != null) { 
 			String[] values = line.split(",");
 			dataTable.add(values); 
 		}
-		
+
 		// Apres avoir charger le CSV on le modifie
-		
-		
+
+
 		String[] header = dataTable.remove(0);
+		createCategories(header.length);
+		for(int i =0; i < header.length;i++) {
+			this.findCategories(dataTable,i); // We are looking for the categories Y
+			System.out.println(categories.get(i));
+		}
 		
-		this.findCategories(dataTable); // We are looking for the categories Y
 		for(int i=0;i<dataTable.size();i++) {
 
 
-			dataTable.get(i)[dataTable.get(i).length-1] = String.valueOf((double) 1+categories.indexOf(dataTable.get(i)[dataTable.get(i).length-1]));
+			dataTable.get(i)[dataTable.get(i).length-1] = String.valueOf((double) 1+categories.get(dataTable.get(i).length-1).indexOf(dataTable.get(i)[dataTable.get(i).length-1]));
 
 		}
-		
-		
+
+
 		CSVWriter writerTest = new CSVWriter(new FileWriter(pathOut));
-        writerTest.writeAll(dataTable);
-        writerTest.close();
-		
+		writerTest.writeAll(dataTable);
+		writerTest.close();
+
 	}
 
-	
-	
-	private void findCategories(List<String[]> dataTable) {
-		// On stocke toutes les catégories possibles de la variable d'interet
-		int lastCol = dataTable.get(0).length -1;
-		for(int i=0; i < dataTable.size();i++) {
-			if(!categories.contains(dataTable.get(i)[lastCol])) {
-				categories.add(dataTable.get(i)[lastCol]);
+
+
+	private void createCategories(int length) {
+		if(!categoriesCreated){
+			for(int i = 0;i < length;i++) {
+				categories.put(i,new ArrayList<String>());
 			}
+			categoriesCreated = true;
 		}
 		
+	}
+	private void findCategories(List<String[]> dataTable,int col) {
+		// On stocke toutes les catégories possibles de la variable d'interet
+
+		for(int i=0; i < dataTable.size();i++) {
+			if(!categories.get(col).contains(dataTable.get(i)[col])) {
+				categories.get(col).add(dataTable.get(i)[col]);
+			}
+		}
+
 	}
 
 	// Renvoie true si la méthode est bien disponible pour la librairi spark ML
 	public boolean isValidMethode() {
-		
+
 		return (SparkMLLib.allowedMethods.contains(this.methode) );
 	}
 
@@ -107,13 +143,54 @@ public class SparkMLLib extends Library{
 
 	// Renvoie la valeur de l'accuracy pour la méthode choisie
 	private double getResult() {
+		double res = 0.0;
+
 		if(this.methode.equals("DecisionTree")) {
-			return this.sparkMl.getResultTree();
+
+			res = this.decisionTree();
 		}
-		if(this.methode.equals("RandomForest")) {
-			return this.sparkMl.getResultRandomForest();
+		else if(this.methode.equals("RandomForest")) {
+			res = this.randomForest();
 		}
-		return 0;
+		else if(this.methode.equals("SVM")) {
+			res =  this.sparkMl.getResultSVM();
+		}
+
+		return res;
+
+	}
+	
+	private double decisionTree() {
+		String impurity = "gini";
+		int maxDepth = 10; // Max depth of the tree
+		
+		if(args.containsKey("impurity")) {
+			impurity = args.get("impurity");
+		}
+		if(args.containsKey("maxDepth")) {
+			maxDepth = Integer.valueOf(args.get("maxDepth"));
+		}
+		
+		return this.sparkMl.getResultTree(impurity, maxDepth);
+	}
+	
+	private double randomForest() {
+		String impurity = "gini";
+		int maxDepth = 20;
+		int numTrees = 100;
+		
+		if(args.containsKey("impurity")) {
+			impurity = args.get("impurity");
+		}
+		if(args.containsKey("maxDepth")) {
+			maxDepth = Integer.valueOf(args.get("maxDepth"));
+		}
+		if(args.containsKey("impurity")) {
+			numTrees = Integer.valueOf(args.get("numTrees"));
+		}
+		
+		
+		return this.sparkMl.getResultRandomForest(numTrees,impurity,maxDepth);
 	}
 
 }

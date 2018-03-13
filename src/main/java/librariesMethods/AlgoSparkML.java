@@ -17,6 +17,8 @@ import org.apache.spark.ml.feature.StringIndexer;
 import org.apache.spark.ml.feature.StringIndexerModel;
 import org.apache.spark.ml.feature.VectorIndexer;
 import org.apache.spark.ml.feature.VectorIndexerModel;
+import org.apache.spark.mllib.classification.SVMModel;
+import org.apache.spark.mllib.classification.SVMWithSGD;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.mllib.regression.LabeledPoint;
@@ -43,6 +45,7 @@ public class AlgoSparkML implements java.io.Serializable{
 
 	private JavaRDD<LabeledPoint> dataTest;
 	private JavaRDD<LabeledPoint> dataTrain;
+	private int numClasses;
 	/*
 	 * Create a AlgoSparkML ready to test on any methods
 	 */
@@ -50,8 +53,8 @@ public class AlgoSparkML implements java.io.Serializable{
 	static private SparkConf sparkConf = new SparkConf().setAppName("backToBackProject").setMaster("local[2]").set("spark.executor.memory","1g");
 	static private JavaSparkContext jsc = new JavaSparkContext(sparkConf);
 	static private SQLContext sqlContext = new SQLContext(jsc);
-	public AlgoSparkML (String testPath,String trainingPath) {
-		
+	public AlgoSparkML (String testPath,String trainingPath,int numClasses) {
+		this.numClasses = numClasses +1 ;
 		//Configuration of Spark
 		SparkConf sparkConf = AlgoSparkML.sparkConf;
 		
@@ -132,12 +135,11 @@ public class AlgoSparkML implements java.io.Serializable{
 		
 	}
 	
-	public double getResultTree() {
+	public double getResultTree(String impurity,int maxDepth) {
 		// Define parameters
-		int numClasses = 4; // Number of category
+
 		Map<Integer, Integer> categoricalFeaturesInfo = new HashMap();// Indicate if there is any categorial variable
-		String impurity = "gini";
-		int maxDepth = 10; // Max depth of the tree
+		
 		int maxBins = 32; // Do not change for now
 		
 		// Creation of the tree
@@ -160,16 +162,14 @@ public class AlgoSparkML implements java.io.Serializable{
 
 	}
 
-	public double getResultRandomForest() {
+	public double getResultRandomForest(int numTrees,String impurity,int maxDepth) {
 		
 		// Train a RandomForest model.
-		// Empty categoricalFeaturesInfo indicates all features are continuous.
-		int numClasses = 4;
+
 		Map<Integer, Integer> categoricalFeaturesInfo = new HashMap();// Indicate if there is any categorial variable
-		int numTrees = 100; // Use more in practice.
+		 // Use more in practice.
 		String featureSubsetStrategy = "auto"; // Let the algorithm choose.
-		String impurity = "gini";
-		int maxDepth = 20;
+		
 		int maxBins = 32;
 		int seed = 120;
 		RandomForestModel model = RandomForest.trainClassifier(dataTrain, numClasses, categoricalFeaturesInfo,
@@ -182,8 +182,31 @@ public class AlgoSparkML implements java.io.Serializable{
 		  predictionAndLabel.filter(pl -> !pl._1().equals(pl._2())).count() / (double) dataTest.count();
 		System.out.println("Test Error: " + testErr);
 		
-		return testErr;
+		return (1-testErr);
 		
+	}
+	
+
+	
+
+
+	
+	public double getResultSVM() {
+		// Run training algorithm to build the model.
+		int numIterations = 100;
+		SVMModel model = SVMWithSGD.train(dataTrain.rdd(), numIterations);
+
+		// Clear the default threshold.
+		model.clearThreshold();
+
+		// Compute raw scores on the test set.
+		JavaRDD<Tuple2<Object, Object>> scoreAndLabels = dataTest.map(p ->
+		  new Tuple2<>(model.predict(p.features()), p.label()));
+		double testErr =
+				  scoreAndLabels.filter(pl -> !pl._1().equals(pl._2())).count() / (double) dataTest.count();
+				System.out.println("Test Error: " + testErr);
+				
+				return testErr;
 	}
 	
 
