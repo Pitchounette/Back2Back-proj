@@ -11,12 +11,19 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.VoidFunction;
+import org.apache.spark.ml.classification.RandomForestClassifier;
 import org.apache.spark.ml.feature.PCA;
+import org.apache.spark.ml.feature.StringIndexer;
+import org.apache.spark.ml.feature.StringIndexerModel;
+import org.apache.spark.ml.feature.VectorIndexer;
+import org.apache.spark.ml.feature.VectorIndexerModel;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.mllib.regression.LabeledPoint;
 import org.apache.spark.mllib.tree.DecisionTree;
+import org.apache.spark.mllib.tree.RandomForest;
 import org.apache.spark.mllib.tree.model.DecisionTreeModel;
+import org.apache.spark.mllib.tree.model.RandomForestModel;
 import org.apache.spark.mllib.util.MLUtils;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -39,14 +46,19 @@ public class AlgoSparkML implements java.io.Serializable{
 	/*
 	 * Create a AlgoSparkML ready to test on any methods
 	 */
+	
+	static private SparkConf sparkConf = new SparkConf().setAppName("backToBackProject").setMaster("local[2]").set("spark.executor.memory","1g");
+	static private JavaSparkContext jsc = new JavaSparkContext(sparkConf);
+	static private SQLContext sqlContext = new SQLContext(jsc);
 	public AlgoSparkML (String testPath,String trainingPath) {
 		
 		//Configuration of Spark
-		SparkConf sparkConf = new SparkConf().setAppName("DecisionTreeExample").setMaster("local[2]").set("spark.executor.memory","1g");;
+		SparkConf sparkConf = AlgoSparkML.sparkConf;
 		
 		// Start the Spark  and SQL Context
-		JavaSparkContext jsc = new JavaSparkContext(sparkConf);
-		SQLContext sqlContext = new SQLContext(jsc);
+		JavaSparkContext jsc = AlgoSparkML.jsc;
+	
+		SQLContext sqlContext = AlgoSparkML.sqlContext;
 			
 	
 		// Create a DataSet of Row where he infer the schema of the line
@@ -112,9 +124,9 @@ public class AlgoSparkML implements java.io.Serializable{
 				            
 				        });
 		/* Some test to see if everythings is allright*/
-		System.out.println(trainDataInput.first());
-		System.out.println(trainDataInput.first().toString());
-		System.out.println(dataTrain.first());
+		//System.out.println(trainDataInput.first());
+		//System.out.println(trainDataInput.first().toString());
+		//System.out.println(dataTrain.first());
 		
 
 		
@@ -148,6 +160,32 @@ public class AlgoSparkML implements java.io.Serializable{
 
 	}
 
+	public double getResultRandomForest() {
+		
+		// Train a RandomForest model.
+		// Empty categoricalFeaturesInfo indicates all features are continuous.
+		int numClasses = 4;
+		Map<Integer, Integer> categoricalFeaturesInfo = new HashMap();// Indicate if there is any categorial variable
+		int numTrees = 100; // Use more in practice.
+		String featureSubsetStrategy = "auto"; // Let the algorithm choose.
+		String impurity = "gini";
+		int maxDepth = 20;
+		int maxBins = 32;
+		int seed = 120;
+		RandomForestModel model = RandomForest.trainClassifier(dataTrain, numClasses, categoricalFeaturesInfo,
+		  numTrees, featureSubsetStrategy, impurity, maxDepth, maxBins,seed);
+
+		// Evaluate model on test instances and compute test error
+		JavaPairRDD<Double, Double> predictionAndLabel =
+		  dataTest.mapToPair(p -> new Tuple2<>(model.predict(p.features()), p.label()));
+		double testErr =
+		  predictionAndLabel.filter(pl -> !pl._1().equals(pl._2())).count() / (double) dataTest.count();
+		System.out.println("Test Error: " + testErr);
+		
+		return testErr;
+		
+	}
+	
 
 }
 

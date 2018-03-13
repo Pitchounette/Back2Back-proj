@@ -18,11 +18,10 @@ public class Lanceur {
 		String pathData = "src/main/resources/iris.csv";
 		SplitCSV dataSplit = new SplitCSV(pathData, "iris");
 
-		Library sparkML = new SparkMLLib(dataSplit,"Arbre");
+		Library sparkML = new SparkMLLib(dataSplit,"DecisionTree");
+		Library sparkML2 = new SparkMLLib(dataSplit,"RandomForest");
 
-
-		Library Weka = new WekaLib(dataSplit,"Arbre");
-		Comparateur comparateur = new Comparateur(Weka,sparkML);
+		Comparateur comparateur = new Comparateur(sparkML2,sparkML);
 		System.out.println(comparateur.getResult());
 
 	}
