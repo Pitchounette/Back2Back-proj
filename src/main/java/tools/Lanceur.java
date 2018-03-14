@@ -26,7 +26,7 @@ public class Lanceur {
 		HashMap argumentsRenjin = new HashMap<String,String>();
 		argumentsRenjin.put("indY", "5");
 		Library sparkMLEx1 = new SparkMLLib(dataSplit,Methode.RANDOMFOREST);
-		Library rEnginEx1 = new RenjinLib(dataSplit,Methode.RANDOMFOREST,argumentsRenjin);
+		Library rEnginEx1 = new RenjinLib(dataSplit,Methode.DECISIONTREE,argumentsRenjin);
 		Library wekaEx1 = new WekaLib(dataSplit,Methode.RANDOMFOREST);
 		
 		// Afficher du taux de bonne prédiction

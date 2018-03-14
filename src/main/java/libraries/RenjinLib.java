@@ -75,7 +75,8 @@ public class RenjinLib extends Library {
 			}
 			else {
 				try { // Faire appel à chaque modèle statistique ici? Qu'en est il de celles qui ont des paramètres?
-					accuracy =  this.renjin.treeAccuracy((int) Integer.parseInt(this.args.get("indY")), (int) Integer.parseInt(this.usedArgs.get("minbucket")));
+					accuracy =  this.renjin.treeAccuracy((int) Integer.parseInt(this.args.get("indY")), (int) Integer.parseInt(this.usedArgs.get("minbucket")),
+							(boolean) Boolean.parseBoolean((this.usedArgs.get("transform"))));
 				} catch (Exception e) {
 					System.out.println("Error during calcul, accuracy = 0");
 					e.printStackTrace();
