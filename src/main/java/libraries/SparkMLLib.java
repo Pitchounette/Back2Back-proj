@@ -43,6 +43,7 @@ public class SparkMLLib extends Library{
 
 
 	}
+	
 	public SparkMLLib(SplitCSV data, Methode methode,Map<String,String> args) throws IOException {
 		super(data, methode);
 		this.args = args;
@@ -146,14 +147,14 @@ public class SparkMLLib extends Library{
 	private double getResult() {
 		double res = 0.0;
 
-		if(this.methode.equals("DecisionTree")) {
+		if(this.methode.equals(Methode.DECISIONTREE)) {
 
 			res = this.decisionTree();
 		}
-		else if(this.methode.equals("RandomForest")) {
+		else if(this.methode.equals(Methode.RANDOMFOREST)) {
 			res = this.randomForest();
 		}
-		else if(this.methode.equals("SVM")) {
+		else if(this.methode.equals(Methode.SVM)) {
 			res =  this.sparkMl.getResultSVM();
 		}
 
@@ -186,7 +187,7 @@ public class SparkMLLib extends Library{
 		if(args.containsKey("maxDepth")) {
 			maxDepth = Integer.valueOf(args.get("maxDepth"));
 		}
-		if(args.containsKey("impurity")) {
+		if(args.containsKey("numTrees")) {
 			numTrees = Integer.valueOf(args.get("numTrees"));
 		}
 		
