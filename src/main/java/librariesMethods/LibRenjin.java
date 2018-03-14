@@ -28,6 +28,7 @@ public class LibRenjin {
 	}
 	
 	public double treeAccuracy(int indY, int minBucket) throws Exception {
+		this.engine.eval(new java.io.FileReader("src/main/resources/scriptR.R"));
 		engine.put("repertoireTrain",this.train);
 		engine.put("repertoireTest",this.test);
 		engine.put("indY",indY);
@@ -37,6 +38,7 @@ public class LibRenjin {
 	}
 	
 	public double randomForestAccuracy(int indY, int ntree, int mtry, boolean transform) throws Exception {
+		this.engine.eval(new java.io.FileReader("src/main/resources/scriptR.R"));
 		engine.put("repertoireTrain",this.train);
 		engine.put("repertoireTest",this.test);
 		engine.put("indY", indY);
