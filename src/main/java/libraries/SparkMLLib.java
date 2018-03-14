@@ -18,12 +18,12 @@ import au.com.bytecode.opencsv.CSVWriter;
 import librariesMethods.AlgoSparkML;
 
 public class SparkMLLib extends Library{
-	private AlgoSparkML sparkMl;
-	private HashMap<Integer,ArrayList<String>> categories ;
-	private boolean categoriesCreated = false;
-	private Map<String,String> args;
-	static private Methode[] array = {Methode.DECISIONTREE,Methode.RANDOMFOREST,Methode.SVM};
-	static public ArrayList<Methode> allowedMethods = new ArrayList<Methode>(Arrays.asList(array)) ;
+	private AlgoSparkML sparkMl; // L'instance chargée de faire les calculs statistiques
+	private HashMap<Integer,ArrayList<String>> categories ; // Hashmap dont la clef correspond au numero de la colone, et les values sont la liste des différentes valeurs (unique) dans la colonne
+	private boolean categoriesCreated = false; // Vaut true si le hashMap categories à déja été initialisé
+	private Map<String,String> args; // Contient en clef le nom du paramétres que souhaite changé l'utilisateur et en value la valeur qu'il faut donnée à ce paramétre
+	static private Methode[] array = {Methode.DECISIONTREE,Methode.RANDOMFOREST,Methode.SVM}; // Contient la liste des méthodes disponible pour sparkML
+	static public ArrayList<Methode> allowedMethods = new ArrayList<Methode>(Arrays.asList(array)) ; // Contient la liste des méthodes disponible pour sparkML
 
 	public SparkMLLib(SplitCSV data, Methode methode) throws IOException {
 		super(data, methode);
@@ -44,6 +44,7 @@ public class SparkMLLib extends Library{
 
 	}
 	
+	// Constructeur de la classe pour le cas ou l'on passe en argument un ensemble de parametres à utiliser pour la méthode
 	public SparkMLLib(SplitCSV data, Methode methode,Map<String,String> args) throws IOException {
 		super(data, methode);
 		this.args = args;
@@ -58,16 +59,19 @@ public class SparkMLLib extends Library{
 		transformColumn(data.getTestingPath(),testFile);
 		transformColumn(data.getTrainingPath(),trainFile);
 
+		// On cree une instance de sparkML 
 		sparkMl = new AlgoSparkML(testFile,trainFile,categories.size());
 
 
 	}
 	
 
-	// Write a new csv file that contain the same information that the one at pathIn but change the last colum
-	// By transforming the categorial variable into 1.0,2.0,3.0 ...
+	// Write a new csv file that contain the same information that the one at pathIn but change the column where there is qualitative variables
+	// By transforming the modalites into 1.0,2.0,3.0 ...
 
 	private void transformColumn(String pathIn, String pathOut) throws IOException {
+		
+		// Import the dataset at path IN
 		File file = new File(pathIn);
 		List<String[]> dataTable = new ArrayList<String[]>();
 		BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -80,23 +84,25 @@ public class SparkMLLib extends Library{
 
 		// Apres avoir charger le CSV on le modifie
 
-
+		// Stock all the unique  value of each column in the dataset
 		String[] header = dataTable.remove(0);
-		createCategories(header.length);
-		for(int i =0; i < header.length;i++) {
-			this.findCategories(dataTable,i); // We are looking for the categories Y
+		createCategories(header.length); // Create the map in which we will put all the unique value
+		for(int i =0; i < header.length;i++) { // For each column add the unique value into the categories map
+			this.findCategories(dataTable,i); //
 			
 		}
 		
+		// For each column, if it has less than 4 differents unique value, we assume it is qualitative and transform the column 
 		for(int col =0; col< header.length;col++) {
 			if(categories.get(col).size() < 4) {
 				for(int i=0;i<dataTable.size();i++) {
-						dataTable.get(i)[col] = String.valueOf((double) 1+categories.get(col).indexOf(dataTable.get(i)[col]));
+						dataTable.get(i)[col] = String.valueOf((double) 1+categories.get(col).indexOf(dataTable.get(i)[col])); // Replace the value by the index of the value into the list of the different value of the column
 				}
 			}
 		}
 
 
+		// Write the new CSV file in the pathOut
 		CSVWriter writerTest = new CSVWriter(new FileWriter(pathOut));
 		writerTest.writeAll(dataTable);
 		writerTest.close();
@@ -104,7 +110,7 @@ public class SparkMLLib extends Library{
 	}
 
 
-
+	// Initiate the categories map by creating a ArrayList for each column in the dataset
 	private void createCategories(int length) {
 		if(!categoriesCreated){
 			for(int i = 0;i < length;i++) {
@@ -114,6 +120,8 @@ public class SparkMLLib extends Library{
 		}
 		
 	}
+	
+	// Find and stock all the differents value in the dataset at the column col
 	private void findCategories(List<String[]> dataTable,int col) {
 		// On stocke toutes les catégories possibles de la variable d'interet
 
@@ -148,7 +156,6 @@ public class SparkMLLib extends Library{
 		double res = 0.0;
 
 		if(this.methode.equals(Methode.DECISIONTREE)) {
-
 			res = this.decisionTree();
 		}
 		else if(this.methode.equals(Methode.RANDOMFOREST)) {
@@ -162,10 +169,14 @@ public class SparkMLLib extends Library{
 
 	}
 	
+	// Return the accuracy of the decision Tree model, and test if any arguments has been given
 	private double decisionTree() {
+		
+		// Default arguments for the model
 		String impurity = "gini";
 		int maxDepth = 10; // Max depth of the tree
 		
+		// Test if any arguments has been given
 		if(args.containsKey("impurity")) {
 			impurity = args.get("impurity");
 		}
@@ -176,11 +187,16 @@ public class SparkMLLib extends Library{
 		return this.sparkMl.getResultTree(impurity, maxDepth);
 	}
 	
+	
+	// Return the accuracy of the random forest model, and test if any arguments has been given
 	private double randomForest() {
+		
+		// Default argument of the model
 		String impurity = "gini";
 		int maxDepth = 20;
 		int numTrees = 100;
 		
+		// Test if any arguments has been given
 		if(args.containsKey("impurity")) {
 			impurity = args.get("impurity");
 		}

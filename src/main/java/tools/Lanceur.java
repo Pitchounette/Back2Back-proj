@@ -21,6 +21,8 @@ public class Lanceur {
 		SplitCSV dataSplit = new SplitCSV(pathData, "iris");
 		HashMap argumentsLib1 = new HashMap<String,String>();
 		argumentsLib1.put("maxDepth", "1");
+		argumentsLib1.put("numTrees", "10");
+		
 		Library sparkML = new SparkMLLib(dataSplit,Methode.RANDOMFOREST,argumentsLib1);
 		Library sparkML2 = new SparkMLLib(dataSplit,Methode.RANDOMFOREST);
 
