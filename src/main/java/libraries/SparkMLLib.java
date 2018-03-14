@@ -22,10 +22,10 @@ public class SparkMLLib extends Library{
 	private HashMap<Integer,ArrayList<String>> categories ;
 	private boolean categoriesCreated = false;
 	private Map<String,String> args;
-	static private String[] array = {"DecisionTree","RandomForest","SVM"};
-	static public ArrayList<String> allowedMethods = new ArrayList<String>(Arrays.asList(array)) ;
+	static private Methode[] array = {Methode.DECISIONTREE,Methode.RANDOMFOREST,Methode.SVM};
+	static public ArrayList<Methode> allowedMethods = new ArrayList<Methode>(Arrays.asList(array)) ;
 
-	public SparkMLLib(SplitCSV data, String methode) throws IOException {
+	public SparkMLLib(SplitCSV data, Methode methode) throws IOException {
 		super(data, methode);
 		args = new HashMap<String,String>();
 		categories = new HashMap<Integer,ArrayList<String>>();
@@ -43,7 +43,7 @@ public class SparkMLLib extends Library{
 
 
 	}
-	public SparkMLLib(SplitCSV data, String methode,Map<String,String> args) throws IOException {
+	public SparkMLLib(SplitCSV data, Methode methode,Map<String,String> args) throws IOException {
 		super(data, methode);
 		this.args = args;
 		categories = new HashMap<Integer,ArrayList<String>>();
@@ -126,7 +126,7 @@ public class SparkMLLib extends Library{
 
 	// Renvoie true si la méthode est bien disponible pour la librairi spark ML
 	public boolean isValidMethode() {
-
+		// Amodifier ?
 		return (SparkMLLib.allowedMethods.contains(this.methode) );
 	}
 

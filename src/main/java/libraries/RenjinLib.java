@@ -1,42 +1,36 @@
 package libraries;
 
+import librariesMethods.LibRenjin;
 import librariesMethods.LibWeka;
 import tools.SplitCSV;
 import weka.classifiers.trees.RandomForest;
 
-public class WekaLib extends Library  {
-
+public class RenjinLib extends Library {
 	
-	private LibWeka weka ;
-	public WekaLib(SplitCSV data, Methode methode) {
+	private LibRenjin renjin ;
+	public RenjinLib(SplitCSV data, Methode methode) {
 		super(data, methode);
 		try {
-			weka = new LibWeka(data.getTestingPath(),data.getTrainingPath(),false);
+			renjin = new LibRenjin(data.getTestingPath(),data.getTrainingPath());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 	}
-
 	@Override
 	public boolean isValidMethode() {
-		return weka.getMethode().contains(this.methode);
-		
-	}
+		return renjin.getMethode().contains(this.methode);
 
+	}
 	@Override
 	public double getAccuracy() {
-		RandomForest rf;
-		try { // Faire appel à chaque modèle statistique ici? Qu'en est il de celles qui ont des paramètres?
-			rf = weka.randomForest();
-			return weka.accuracy(rf);
+		try {
+			return this.renjin.getAccuracy();
 		} catch (Exception e) {
 			System.out.println("Error during calcul, accuracy = 0");
 			e.printStackTrace();
 			return 0;
 		}
-
 	}
-
 }

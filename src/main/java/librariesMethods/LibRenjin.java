@@ -1,49 +1,59 @@
 package librariesMethods;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.script.*;
 import org.renjin.script.*;
 import org.renjin.sexp.Vector;
+
+import libraries.Methode;
 
 public class LibRenjin {
 	
 	public ScriptEngine engine;
 	public String train;
 	public String test;
+	private double accuracy;
+	private static Methode array[]= {Methode.DECISIONTREE, Methode.RANDOMFOREST};
+	static public ArrayList<Methode> allowedMethods = new ArrayList<Methode>(Arrays.asList(array)) ;
 	
-	public void LibRenjn(String test, String train) {
-		// create a script engine manager:
+	public LibRenjin(String test, String train) {
+		
 		RenjinScriptEngineFactory factory = new RenjinScriptEngineFactory();
-		// create a Renjin engine:
-		ScriptEngine engine = factory.getScriptEngine();
-		this.engine = engine;
-		engine.put("repertoire", train+".csv");
+		
+		this.engine = factory.getScriptEngine();
 		this.train=train;
 		this.test=test;
 	}
 	
-	public double treeAccuracy(String path, String name) throws Exception {
-		engine.eval(new java.io.FileReader("src/main/resources/scriptR.R"));
-
-		engine.put("y", "Species");
-		engine.put("splitRatio", 0.7);
-		engine.put("minBucket", 20);
-		Vector accuracyVector = (Vector)engine.eval("arbre_classification(repertoire,y, splitRatio, minBucket)");
-		double accuracy = accuracyVector.getElementAsDouble(0);
-		return accuracy;
+	public void treeAccuracy(int indY, int minBucket) throws Exception {
+		engine.put("repertoireTrain",this.train);
+		engine.put("repertoireTest",this.test);
+		engine.put("indY",indY);
+		engine.put("minBucket", minBucket);
+		Vector accuracyVector = (Vector)engine.eval("arbre_classification(repertoireTrain,repertoireTest,y, splitRatio, minBucket)");
+		this.accuracy = accuracyVector.getElementAsDouble(0);
 	}
 	
-	public double randomForestAccuracy() throws Exception {
-		engine.eval(new java.io.FileReader("src/main/resources/scriptR.R"));
-		engine.put("indY", 19);
-		engine.put("ntree", 3);
-		engine.put("mtry", 2);
-		engine.put("transform", true);
-		Vector accuracyVector = (Vector)engine.eval("foret_aléatoire(repertoire, indY, ntree, mtry, transform)");
-		double accuracy = accuracyVector.getElementAsDouble(0);
-		return accuracy;
+	public void randomForestAccuracy(int indY, int ntree, int mtry, boolean transform) throws Exception {
+		engine.put("repertoireTrain",this.train);
+		engine.put("repertoireTest",this.test);
+		engine.put("indY", indY);
+		engine.put("ntree", ntree);
+		engine.put("mtry", mtry);
+		engine.put("transform", transform);
+		Vector accuracyVector = (Vector)engine.eval("foret_aléatoire(repertoireTrain,repertoireTest, indY, ntree, mtry, transform)");
+		this.accuracy = accuracyVector.getElementAsDouble(0);
 	}
-
+	
+	public double getAccuracy() {
+		return this.accuracy;
+	}
+	
+	public ArrayList<Methode> getMethode() {
+		return allowedMethods;
+	}
 }
 

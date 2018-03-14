@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import libraries.Library;
+import libraries.Methode;
 import libraries.SparkMLLib;
 import libraries.WekaLib;
 
@@ -20,8 +21,8 @@ public class Lanceur {
 		SplitCSV dataSplit = new SplitCSV(pathData, "iris");
 		HashMap argumentsLib1 = new HashMap<String,String>();
 		argumentsLib1.put("maxDepth", "1");
-		Library sparkML = new SparkMLLib(dataSplit,"RandomForest",argumentsLib1);
-		Library sparkML2 = new SparkMLLib(dataSplit,"RandomForest");
+		Library sparkML = new SparkMLLib(dataSplit,Methode.RANDOMFOREST,argumentsLib1);
+		Library sparkML2 = new SparkMLLib(dataSplit,Methode.RANDOMFOREST);
 
 		Comparateur comparateur = new Comparateur(sparkML,sparkML2);
 		System.out.println(comparateur.getResult());

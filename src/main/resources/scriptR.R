@@ -5,7 +5,7 @@ library(randomForest)
 #library(caTools)
 
 
-arbre_classification = function(repertoireTrain, repertoireTrain, indY,splitRatio=0.7, minbucket=10, transform){
+arbre_classification = function(repertoireTrain, repertoireTest, indY, minbucket=10, transform){
   train.fichier = read.csv(repertoireTrain, header=TRUE)
   test.fichier = read.csv(repertoireTest, header=TRUE)
   if (!is.factor(train.fichier[,indY]) & transform){

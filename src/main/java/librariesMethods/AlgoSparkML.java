@@ -186,10 +186,6 @@ public class AlgoSparkML implements java.io.Serializable{
 		
 	}
 	
-
-	
-
-
 	
 	public double getResultSVM() {
 		// Run training algorithm to build the model.

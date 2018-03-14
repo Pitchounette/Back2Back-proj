@@ -1,7 +1,10 @@
 package librariesMethods;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
+import libraries.Methode;
 import tools.SplitCSV;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
@@ -17,6 +20,8 @@ public class LibWeka {
 
 	private Instances train;
 	private Instances test;
+	private static Methode array[]= {Methode.DECISIONTREE, Methode.RANDOMFOREST};
+	static public ArrayList<Methode> allowedMethods = new ArrayList<Methode>(Arrays.asList(array)) ;
 	
 	public LibWeka(String testPath,String trainPath, boolean header) throws Exception {
 		
@@ -76,8 +81,6 @@ public class LibWeka {
 		return eval.pctCorrect()/100;
 	}
 	
-	
-	
 	public static void main(String[] args) throws Exception {
 		LibWeka weka = new LibWeka("src/main/resources/","iris", true);
 		J48 tree = weka.decisionTree();
@@ -87,5 +90,8 @@ public class LibWeka {
 		System.out.println(weka.accuracy(rf));
 	}
 	
+	public ArrayList<Methode> getMethode() {
+		return allowedMethods;
+	}
 
 }
