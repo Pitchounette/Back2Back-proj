@@ -28,6 +28,7 @@ public class SparkMLLib extends Library{
 	public SparkMLLib(SplitCSV data, Methode methode) throws IOException {
 		super(data, methode);
 		args = new HashMap<String,String>();
+
 		categories = new HashMap<Integer,ArrayList<String>>();
 
 		// Chemin des fichiers dédié à SparkMl
@@ -64,6 +65,7 @@ public class SparkMLLib extends Library{
 
 
 	}
+	
 	
 
 	// Write a new csv file that contain the same information that the one at pathIn but change the column where there is qualitative variables

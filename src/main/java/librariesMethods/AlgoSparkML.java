@@ -37,6 +37,8 @@ import org.apache.spark.sql.types.StructType;
 
 import scala.Tuple2;
 import org.apache.spark.SparkConf;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
 
 
 
@@ -65,6 +67,8 @@ public class AlgoSparkML implements java.io.Serializable{
 		// Start the Spark  and SQL Context
 		JavaSparkContext jsc = AlgoSparkML.jsc;
 		SQLContext sqlContext = AlgoSparkML.sqlContext;
+		Logger.getLogger("org").setLevel(Level.OFF);
+		Logger.getLogger("akka").setLevel(Level.OFF);
 
 
 		// Create a DataSet of Row where he infer the schema of the line
@@ -105,6 +109,7 @@ public class AlgoSparkML implements java.io.Serializable{
 						LabeledPoint((Double.parseDouble(fields[fields.length-1])),
 								Vectors.dense(res));
 				return labeledPoint;
+				
 			}
 		});
 
@@ -150,7 +155,7 @@ public class AlgoSparkML implements java.io.Serializable{
 				dataTest.mapToPair(p -> new Tuple2<>(model.predict(((LabeledPoint) p).features()), ((LabeledPoint) p).label()));
 		// calculate the accuracy
 
-		System.out.println(model.toDebugString()); // Print the tree 
+		// System.out.println(model.toDebugString()); // Print the tree 
 		double accuracy =
 				predictionAndLabel.filter(pl -> pl._1().equals(pl._2())).count() / (double) dataTest.count();
 

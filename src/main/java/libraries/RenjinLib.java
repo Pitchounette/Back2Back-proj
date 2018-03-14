@@ -24,6 +24,22 @@ public class RenjinLib extends Library {
 			e.printStackTrace();
 		}
 		this.args=args;
+		usedArgs = new HashMap<String,String>();
+		usedArgs.put("ntree", "200");
+		usedArgs.put("mtry", "'");
+		usedArgs.put("transform", "true");
+		usedArgs.put("minbucket", "10");
+	}
+	public RenjinLib(SplitCSV data, Methode methode) {
+		super(data, methode);
+		try {
+			renjin = new LibRenjin(data.getTestingPath(),data.getTrainingPath());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.args= new HashMap<String,String>();
+		usedArgs = new HashMap<String,String>();
 		usedArgs.put("ntree", "200");
 		usedArgs.put("mtry", "'");
 		usedArgs.put("transform", "true");
