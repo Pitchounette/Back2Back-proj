@@ -26,23 +26,7 @@ public class SparkMLLib extends Library{
 	static public ArrayList<Methode> allowedMethods = new ArrayList<Methode>(Arrays.asList(array)) ; // Contient la liste des méthodes disponible pour sparkML
 
 	public SparkMLLib(SplitCSV data, Methode methode) throws IOException {
-		super(data, methode);
-		args = new HashMap<String,String>();
-
-		categories = new HashMap<Integer,ArrayList<String>>();
-
-		// Chemin des fichiers dédié à SparkMl
-		String testFile = "src/main/resources/test_spark.csv";
-		String trainFile = "src/main/resources/train_spark.csv";
-
-		/* On va modifier les tables csv pour convenir au format Pour test et train notamment transformer la variable catégoriel d'interet en 1.0,2.0,3.0*/
-
-		transformColumn(data.getTestingPath(),testFile);
-		transformColumn(data.getTrainingPath(),trainFile);
-
-		sparkMl = new AlgoSparkML(testFile,trainFile,categories.size());
-
-
+		this(data,methode,new HashMap<String,String>());
 	}
 	
 	// Constructeur de la classe pour le cas ou l'on passe en argument un ensemble de parametres à utiliser pour la méthode

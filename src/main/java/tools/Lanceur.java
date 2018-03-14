@@ -64,7 +64,7 @@ public class Lanceur {
 		Comparateur comparateurEx3 = new Comparateur(sparkMLEx3,sparkML2Ex3);
 		System.out.println(comparateurEx3.getResult());
 		
-		// Exemple 3 : Comparaison entre deux méthodes avec arguments sur le jeux statsFSEVaryB
+		// Exemple 4 : Comparaison entre deux méthodes avec arguments sur le jeux statsFSEVaryB
 		
 		String pathDataEx4 = "src/main/resources/statsFSEVarFry.csv";
 		SplitCSV dataSplitEx4 = new SplitCSV(pathDataEx3, "exemple4");
