@@ -26,7 +26,7 @@ public class RenjinLib extends Library {
 		this.args=args;
 		usedArgs = new HashMap<String,String>();
 		usedArgs.put("ntree", "200");
-		usedArgs.put("mtry", "'");
+		usedArgs.put("mtry", "4");
 		usedArgs.put("transform", "true");
 		usedArgs.put("minbucket", "10");
 	}
@@ -41,7 +41,7 @@ public class RenjinLib extends Library {
 		this.args= new HashMap<String,String>();
 		usedArgs = new HashMap<String,String>();
 		usedArgs.put("ntree", "200");
-		usedArgs.put("mtry", "'");
+		usedArgs.put("mtry", "4");
 		usedArgs.put("transform", "true");
 		usedArgs.put("minbucket", "10");
 	}

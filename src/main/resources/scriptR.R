@@ -35,7 +35,7 @@ foret_aléatoire = function(repertoireTrain,repertoireTest, indY, ntree, mtry, t
     train.fichier[,indY] =  as.factor(train.fichier[,indY])
     test.fichier[,indY] =  as.factor(test.fichier[,indY])
   }
-  nameY = names(fichier)[indY]
+  nameY = names(train.fichier)[indY]
 
   set.seed(runif(1,0,1000))
 

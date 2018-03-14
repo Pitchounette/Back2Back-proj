@@ -23,8 +23,10 @@ public class Lanceur {
 		SplitCSV dataSplit = new SplitCSV(pathDataIris, "exemple1"); // SplitCSV permet de séparer le jeu de donnée en une partie d'apprentissage et une partie de test
 		
 		// Création des trois librairies
+		HashMap argumentsRenjin = new HashMap<String,String>();
+		argumentsRenjin.put("indY", "5");
 		Library sparkMLEx1 = new SparkMLLib(dataSplit,Methode.RANDOMFOREST);
-		Library rEnginEx1 = new RenjinLib(dataSplit,Methode.RANDOMFOREST);
+		Library rEnginEx1 = new RenjinLib(dataSplit,Methode.RANDOMFOREST,argumentsRenjin);
 		Library wekaEx1 = new WekaLib(dataSplit,Methode.RANDOMFOREST);
 		
 		// Afficher du taux de bonne prédiction
@@ -38,10 +40,11 @@ public class Lanceur {
 		
 		String pathDataEx2 = "src/main/resources/statsFSEVarFry.csv";
 		SplitCSV dataSplitEx2 = new SplitCSV(pathDataEx2, "exemple2");
-		
+		HashMap argumentsRenjin2 = new HashMap<String,String>();
+		argumentsRenjin2.put("indY", "19");
 		
 		Library sparkMLEx2 = new SparkMLLib(dataSplitEx2,Methode.RANDOMFOREST);
-		Library RenjinEx2 = new RenjinLib(dataSplitEx2,Methode.RANDOMFOREST);
+		Library RenjinEx2 = new RenjinLib(dataSplitEx2,Methode.RANDOMFOREST,argumentsRenjin2);
 
 		Comparateur comparateur = new Comparateur(sparkMLEx2,RenjinEx2);
 		System.out.println(comparateur.getResult());
@@ -67,7 +70,7 @@ public class Lanceur {
 		// Exemple 4 : Comparaison entre deux méthodes avec arguments sur le jeux statsFSEVaryB
 		
 		String pathDataEx4 = "src/main/resources/statsFSEVarFry.csv";
-		SplitCSV dataSplitEx4 = new SplitCSV(pathDataEx3, "exemple4");
+		SplitCSV dataSplitEx4 = new SplitCSV(pathDataEx4, "exemple4");
 		HashMap argumentsLib1Ex4 = new HashMap<String,String>();
 		argumentsLib1Ex4.put("numTrees", "20");
 
