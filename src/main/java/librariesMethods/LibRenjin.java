@@ -27,13 +27,14 @@ public class LibRenjin {
 		this.test=test;
 	}
 	
-	public double treeAccuracy(int indY, int minBucket) throws Exception {
+	public double treeAccuracy(int indY, int minBucket, boolean transform) throws Exception {
 		this.engine.eval(new java.io.FileReader("src/main/resources/scriptR.R"));
 		engine.put("repertoireTrain",this.train);
 		engine.put("repertoireTest",this.test);
 		engine.put("indY",indY);
 		engine.put("minBucket", minBucket);
-		Vector accuracyVector = (Vector)engine.eval("arbre_classification(repertoireTrain,repertoireTest,y, splitRatio, minBucket)");
+		engine.put("transform", transform);
+		Vector accuracyVector = (Vector)engine.eval("arbre_classification(repertoireTrain,repertoireTest,indY, minBucket, transform)");
 		return accuracyVector.getElementAsDouble(0);
 	}
 	
@@ -45,7 +46,7 @@ public class LibRenjin {
 		engine.put("ntree", ntree);
 		engine.put("mtry", mtry);
 		engine.put("transform", transform);
-		Vector accuracyVector = (Vector)engine.eval("foret_aléatoire(repertoireTrain,repertoireTest, indY, ntree, mtry, transform)");
+		Vector accuracyVector = (Vector)engine.eval("foret_aleatoire(repertoireTrain,repertoireTest, indY, ntree, mtry, transform)");
 		return accuracyVector.getElementAsDouble(0);
 	}
 
