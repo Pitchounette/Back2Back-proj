@@ -18,19 +18,27 @@ public class Lanceur {
 	
 	public static void main(String[] args) throws IOException {
 		
-		// Exemple 1 Utilisation standard des 3 librairies pour le jeu de données iris et la méthode RandomForest
+		// Exemple 1 Utilisation standard des 3 librairies pour le 
+		//jeu de données iris et la méthode RandomForest
+		
 		String pathDataIris = "src/main/resources/iris.csv";
-		SplitCSV dataSplit = new SplitCSV(pathDataIris, "exemple1"); // SplitCSV permet de séparer le jeu de donnée en une partie d'apprentissage et une partie de test
+		SplitCSV dataSplit = new SplitCSV(pathDataIris, "exemple1"); 
+		
+		// SplitCSV permet de séparer le jeu de donnée en une partie 
+		//d'apprentissage et une partie de test
 		
 		// Création des trois librairies
+		
+		Library sparkMLEx1 = new SparkMLLib(dataSplit,Methode.RANDOMFOREST);
+		
 		HashMap argumentsRenjin = new HashMap<String,String>();
 		argumentsRenjin.put("indY", "5");
-		Library sparkMLEx1 = new SparkMLLib(dataSplit,Methode.RANDOMFOREST);
 		Library rEnginEx1 = new RenjinLib(dataSplit,Methode.RANDOMFOREST,argumentsRenjin);
+		
 		Library wekaEx1 = new WekaLib(dataSplit,Methode.RANDOMFOREST);
 		
 		// Afficher du taux de bonne prédiction
-		System.out.println("SparkMl accuracy = " + sparkMLEx1.getAccuracy());
+	/*	System.out.println("SparkMl accuracy = " + sparkMLEx1.getAccuracy());*/
 		System.out.println("RenjinLib accuracy = " + rEnginEx1.getAccuracy());
 		System.out.println("WekaEx1 accuracy = " + wekaEx1.getAccuracy());
 		
@@ -40,6 +48,7 @@ public class Lanceur {
 		
 		String pathDataEx2 = "src/main/resources/statsFSEVarFry.csv";
 		SplitCSV dataSplitEx2 = new SplitCSV(pathDataEx2, "exemple2");
+		
 		HashMap argumentsRenjin2 = new HashMap<String,String>();
 		argumentsRenjin2.put("indY", "19");
 		
@@ -66,7 +75,7 @@ public class Lanceur {
 
 		Comparateur comparateurEx3 = new Comparateur(sparkMLEx3,sparkML2Ex3);
 		System.out.println(comparateurEx3.getResult());
-		
+
 		// Exemple 4 : Comparaison entre deux méthodes avec arguments sur le jeux statsFSEVaryB
 		
 		String pathDataEx4 = "src/main/resources/statsFSEVarFry.csv";
@@ -83,8 +92,6 @@ public class Lanceur {
 
 		Comparateur comparateurEx4 = new Comparateur(sparkMLEx4,sparkML2Ex4);
 		System.out.println(comparateurEx4.getResult());
-
-
 		
 
 	}
