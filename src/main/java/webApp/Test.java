@@ -33,22 +33,7 @@ public class Test extends HttpServlet {
     		String end = myFile.substring(myFile.length()-4, myFile.length());
     		// ajouter l'import d'un fichier 
     		
-    			response.setContentType("text/html");
-    			PrintWriter out = response.getWriter();
-    			out.println("<html>\n" + 
-    					"  <head>\n" + 
-    					"    <meta name=\"author\" content=\"Pierre Laffite\">\n" + 
-    					"    <title>Les Forets.com</title>\n" + 
-    					"  </head>\n" + 
-    					"  <body>\n" + 
-    					"  <form name=\"formulaire\" id=\"formulaire\" action=\"/Run\" method=\"POST\">\n" + 
-    					"    <input type=\"radio\" name=\"methode\" value=\"CT\" cheched=\"checked\" required=\"required\" onclick=\"selectNumOfTrees('CT')\"> Classification Tree<br>\n" + 
-    					"    <input type=\"radio\" name=\"methode\" value=\"RF\" onclick=\"selectNumOfTrees('RF')\" > Random Forest\n" + 
-    					"    <div id=\"pritNumTrees\"></div>\n" +
-    					"    <input type=\"submit\" value=\"run\"></input></br>\n" + 
-    					"  </form>\n" +					
-    					"  </body>\n" + 
-    					"</html>\n");
+
     	/*	}else {
     			response.setContentType("text/html");
     			PrintWriter out = response.getWriter();
