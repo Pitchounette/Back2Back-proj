@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@WebServlet(name="Test")
 
-@WebServlet("/Test")
 public class Test extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
        
 
     public Test() {
@@ -20,15 +20,44 @@ public class Test extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		this.getServletContext().getRequestDispatcher("/WEB-INF/bonjour.jsp").forward(request, response);
-		
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	// TODO Auto-generated constructor stub
+    }
+
+
+ 
+    	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    		String choix = request.getParameter("choix");
+    		String myFile = request.getParameter("myFile");
+    		String end = myFile.substring(myFile.length()-4, myFile.length());
+    		// ajouter l'import d'un fichier 
+    		
+    			response.setContentType("text/html");
+    			PrintWriter out = response.getWriter();
+    			out.println("<html>\n" + 
+    					"  <head>\n" + 
+    					"    <meta name=\"author\" content=\"Pierre Laffite\">\n" + 
+    					"    <title>Les Forets.com</title>\n" + 
+    					"  </head>\n" + 
+    					"  <body>\n" + 
+    					"  <form name=\"formulaire\" id=\"formulaire\" action=\"/Run\" method=\"POST\">\n" + 
+    					"    <input type=\"radio\" name=\"methode\" value=\"CT\" cheched=\"checked\" required=\"required\" onclick=\"selectNumOfTrees('CT')\"> Classification Tree<br>\n" + 
+    					"    <input type=\"radio\" name=\"methode\" value=\"RF\" onclick=\"selectNumOfTrees('RF')\" > Random Forest\n" + 
+    					"    <div id=\"pritNumTrees\"></div>\n" +
+    					"    <input type=\"submit\" value=\"run\"></input></br>\n" + 
+    					"  </form>\n" +					
+    					"  </body>\n" + 
+    					"</html>\n");
+    	/*	}else {
+    			response.setContentType("text/html");
+    			PrintWriter out = response.getWriter();
+    			out.println("<HTML>\n<BODY>\n" +
+    					"<H1>L'import a échoué</H1>\n" +
+    					"<p>L'extension du fichier"+end+" n'est pas autorisé.</p>" +                
+    					"</BODY></HTML>");
+    		}*/
+
+    }
 
 }
