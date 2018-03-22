@@ -1,6 +1,7 @@
 package tools;
 
 import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -61,14 +62,19 @@ public class SplitCSV {
 		
 		List<String[]> train = dataTable.subList(0, nbrtrain); 
 		train.add(0, header);
-		String trainFile = "src/main/resources/train_"+this.name+".csv";
+		
+		String trainFile = path.substring(0, path.length()-5)+"train_"+this.name+".csv";
+		/*CSVWriter writerTrain = new CSVWriter(new FileWriter(trainFile),',','\0');
+        writerTrain.writeAll(train);
+        writerTrain.close();*/
+		
 		CSVWriter writerTrain = new CSVWriter(new FileWriter(trainFile),',','\0');
         writerTrain.writeAll(train);
         writerTrain.close();
 		
         List<String[]> test = dataTable.subList(nbrtrain+1, dataTable.size());
 		test.add(0,header);
-		String testFile = "src/main/resources/test_"+this.name+".csv";
+		String testFile = path.substring(0, path.length()-5)+"test_"+this.name+".csv";
 		CSVWriter writerTest = new CSVWriter(new FileWriter(testFile),',','\0');
         writerTest.writeAll(test);
         writerTest.close();
