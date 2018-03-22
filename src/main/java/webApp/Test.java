@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name="Test")
+@WebServlet(name="FrancoisTest")
 
 public class Test extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -28,10 +28,15 @@ public class Test extends HttpServlet {
 
  
     	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    		String choix = request.getParameter("choix");
-    		String myFile = request.getParameter("myFile");
-    		String end = myFile.substring(myFile.length()-4, myFile.length());
+    		String choix = request.getParameter("library1");
+    		response.setContentType("text/html");
+			PrintWriter out = response.getWriter();
+			out.println("<HTML>\n<BODY>\n" +
+					"<H1>Yo</H1>\n" +
+					"<p>Le choix est "+choix+".</p>" +                
+					"</BODY></HTML>");
     		// ajouter l'import d'un fichier 
+    		
     		
 
     	/*	}else {

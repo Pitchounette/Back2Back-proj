@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test</title>
+  </head>
+  <body>
+  <form name="formulaire" id="formulaire" method="POST">
+    Vous pouvez choisir votre propre jeu de données ou utiliser un des jeu de données proposés  :</br>
+    <input type="radio" required="required" name="choix" onclick="afficher('Fichier de la base ');" value ="choose" >Fichier de la base
+    <input type="radio" name="choix" onclick="afficher('Mon fichier');" value="import">Mon fichier
+    <div id="champ1">
+      <select id='monselect' name ="myFile" required="required">
+        <option disabled selected value> -- Choisir le jeu de données -- </option>
+        <option value='iris.csv'>iris.csv</option>
+        <option value='statsFSEVary.csv' >statsFSEVary.csv</option>
+      </select>
+    </div> <input type="submit" value="run"></input></br>
+  </form>
+  <script type="text/javascript">
+  </script>
+  </body>
+</html>

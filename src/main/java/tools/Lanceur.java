@@ -3,10 +3,6 @@ package tools;
 import java.io.IOException;
 import java.util.HashMap;
 
-import libraries.Library;
-import libraries.Methode;
-import libraries.RenjinLib;
-import libraries.SparkMLLib;
 import libraries.WekaLib;
 
 /* Cette classe permet de lancer les programmes il contient des exemples d'utilisation de notre projet
