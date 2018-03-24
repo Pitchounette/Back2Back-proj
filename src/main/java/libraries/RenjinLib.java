@@ -45,6 +45,7 @@ public class RenjinLib extends Library {
 		usedArgs.put("transform", "true");
 		usedArgs.put("minbucket", "10");
 	}
+	
 	@Override
 	public boolean isValidMethode() {
 		return renjin.getMethode().contains(this.methode);

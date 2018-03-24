@@ -24,7 +24,8 @@ public class LibWeka {
 	static public ArrayList<Methode> allowedMethods = new ArrayList<Methode>(Arrays.asList(array)) ;
 	
 	public LibWeka(String testPath,String trainPath, boolean header) throws Exception {
-		
+		System.out.println(trainPath);
+		System.out.println(testPath);
 		File fileTrain = new File(trainPath);
 		CSVLoader loaderTrain = new CSVLoader();
 		loaderTrain.setSource(fileTrain);

@@ -33,21 +33,21 @@ import au.com.bytecode.opencsv.*;
 @WebServlet("/Test")
 public class Test extends HttpServlet {
 	public static final String VUE = "/WEB-INF/ProjetGL.html";
-	
+
 	public String hasImport;
 	public String fileName;
-	
+
 	public String library1;	
 	public String methodeLibrary1=null;
 	public String maxDepth1=null;
 	public String numTrees1=null;
-	
+
 	public String library2= null;
 	public String methodeLibrary2=null;
 	public String maxDepth2=null;
 	public String numTrees2= null;
 
-	
+
 	/* FILE */
 	private boolean isMultipart;
 	private String filePath= null;
@@ -55,7 +55,7 @@ public class Test extends HttpServlet {
 	private int maxMemSize = 4 * 1024;
 	private File file ;
 	public SplitCSV split;
-	
+
 	public Library lib1= null;	
 	public Library lib2= null;	
 
@@ -70,71 +70,87 @@ public class Test extends HttpServlet {
 		System.out.println(hasImport);
 		filePath=request.getServletContext().getRealPath("")+"/WEB-INF/iris.csv";
 		split = new SplitCSV(filePath, "test");
-		
+
 		library1= request.getParameter("library1");
 		methodeLibrary1=request.getParameter("methodeLibrary1");
 		maxDepth1=request.getParameter("maxDepth1");
 		numTrees1=request.getParameter("numTrees1");
-		
+
 		library2= request.getParameter("library2");
 		methodeLibrary2=request.getParameter("methodeLibrary2");
 		maxDepth2=request.getParameter("maxDepth2");
 		numTrees2= request.getParameter("numTrees2");
-		
-		
-		
+
+
+
 		//HashMap arguments1 = new HashMap<String,String>();
 		//arguments1.put("indY", "19");
-		
+
 		//HashMap arguments2 = new HashMap<String,String>();
-		System.out.println("je suis allée jusque là");
+		System.out.println(this.library1);
 		switch (this.library1) {
-		case "sparkml": calculSparkML(lib1);
-		case "renjin": calculRenjin(lib1);
-		case "weka": calculWeka(lib1);
+		case "sparkml": lib1 = calculSparkML();
+		break;
+		case "renjin": lib1 = calculRenjin();
+		break;
+		case "weka":lib1 = calculWeka();
+		break;
 		}
-		
+		System.out.println(lib1);
+
+		System.out.println("je suis allée jusque là 1");
 		switch (this.library2) {
-		case "sparkml": calculSparkML(lib2);
-		case "renjin": calculRenjin(lib2);
-		case "weka": calculWeka(lib2);
+		case "sparkml": lib2 = calculSparkML();
+		break;
+		case "renjin": lib2 = calculRenjin();
+		break;
+		case "weka": lib2 = calculWeka();
+		break;
 		}
-		
-		request.setAttribute("lib1", this.library1);
+
+		request.setAttribute("lib1", this.lib1);
 		request.setAttribute("method1", this.methodeLibrary1);
 		request.setAttribute("acc1", this.lib1.getAccuracy());
-		
-		request.setAttribute("lib2", this.library2);
+
+		request.setAttribute("lib2", this.lib2);
 		request.setAttribute("method2", this.methodeLibrary2);
 		request.setAttribute("acc2", this.lib2.getAccuracy());
-		
+
 		getServletContext().getRequestDispatcher("/WEB-INF/bonjour.jsp").forward(request, response);
-
 	}
 
-	private void calculWeka(Library lib) {
+	private Library calculWeka() {
+		Library libRF = new WekaLib(this.split,Methode.RANDOMFOREST);
+		Library libDT = new WekaLib(this.split,Methode.DECISIONTREE);
+		Library libSVM = new WekaLib(this.split,Methode.SVM);
 		switch (this.methodeLibrary1) {
-		case "randomForest": lib = new WekaLib(this.split,Methode.RANDOMFOREST);
-		case "decisionTree": lib = new WekaLib(this.split,Methode.DECISIONTREE);
-		case "J48": lib = new WekaLib(this.split,Methode.SVM);
+		case "randomForest": return libRF;
+		case "decisionTree": return libDT;
+		case "J48": return libSVM;
+		default : return null ;
 		}
 	}
 
 
-	private void calculRenjin(Library lib) {
+	private Library calculRenjin() {
+		Library libRF = new RenjinLib(this.split,Methode.RANDOMFOREST);
+		Library libDT = new RenjinLib(this.split,Methode.DECISIONTREE);
 		switch (this.methodeLibrary1) {
-		case "randomForest": lib = new RenjinLib(this.split,Methode.RANDOMFOREST);
-		case "decisionTree": lib = new RenjinLib(this.split,Methode.DECISIONTREE);
+		case "randomForest": return libRF;
+		case "decisionTree": return libDT;
+		default : return null ;
 		}
 	}
 
 
-	private void calculSparkML(Library lib) throws IOException {
+	private Library calculSparkML() throws IOException {
+		Library libRF = new SparkMLLib(this.split,Methode.RANDOMFOREST);
+		Library libDT = new SparkMLLib(this.split,Methode.DECISIONTREE);
 		switch (this.methodeLibrary1) {
-		case "randomForest": lib = new SparkMLLib(this.split,Methode.RANDOMFOREST);
-		case "decisionTree": lib = new SparkMLLib(this.split,Methode.DECISIONTREE);
+		case "randomForest": return libRF;
+		case "decisionTree": return libDT;
+		default : return null;
 		}
-		
 	}
 
 
@@ -204,25 +220,6 @@ public class Test extends HttpServlet {
 		} catch(Exception ex) {
 			System.out.println(ex);
 		}
-	}
-
-
-	private double doComparaison(String proportion, String librairie, String methode, String arbres,int moyenne) {
-		double accuracy = 0;
-		for(int i=1;i<=moyenne;i++) {
-			/*avoir la proportion entre 0 et 1*/
-			double propApp = Double.parseDouble(proportion)/100.0;
-			/*avoir un nombre d'arbres = 10 au cas où il y aurait un problème dans la suite*/
-			int nbtree=10;
-			if(!arbres.equals("")) {
-				nbtree=Integer.parseInt(arbres);
-			}
-			//Library l = new Library(this.path, this.vary, propApp, librairie.substring(0, 1).toLowerCase(), methode.substring(0, 1).toLowerCase(), nbtree);
-			//accuracy = accuracy + l.run();
-		}
-		accuracy=accuracy/moyenne;
-		accuracy=Math.round(accuracy*1000)/1000.0;
-		return(accuracy);
 	}
 
 }

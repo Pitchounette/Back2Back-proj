@@ -14,7 +14,7 @@
 
 Algo 1 :
 <pre></pre>
-${lib1}
+${library1}
 <pre></pre>
 ${method1}
 <pre></pre>
@@ -23,7 +23,7 @@ Accuracy = ${acc1}
 
 Algo 2 :
 <pre></pre>
-${lib2}
+${library2}
 <pre></pre>
 ${method2}
 <pre></pre>

@@ -34,7 +34,87 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/lydia/Bureau/opencsv-2.2.jar">
+	<classpathentry kind="lib" path="/home/lydia/.m2/repository/org/apache/spark/spark-mllib-local_2.11/2.2.1/spark-mllib-local_2.11-2.2.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/lydia/.m2/repository/org/apache/spark/spark-graphx_2.11/2.2.1/spark-graphx_2.11-2.2.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/lydia/.m2/repository/org/apache/spark/spark-catalyst_2.11/2.2.1/spark-catalyst_2.11-2.2.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/lydia/.m2/repository/org/apache/spark/spark-sketch_2.11/2.2.1/spark-sketch_2.11-2.2.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/lydia/.m2/repository/org/apache/spark/spark-sql_2.11/2.2.1/spark-sql_2.11-2.2.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/lydia/.m2/repository/org/apache/spark/spark-streaming_2.11/2.2.1/spark-streaming_2.11-2.2.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/lydia/.m2/repository/org/apache/spark/spark-unsafe_2.11/2.2.1/spark-unsafe_2.11-2.2.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/lydia/.m2/repository/org/apache/spark/spark-network-shuffle_2.11/2.2.1/spark-network-shuffle_2.11-2.2.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/lydia/.m2/repository/org/apache/spark/spark-network-common_2.11/2.2.1/spark-network-common_2.11-2.2.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/lydia/.m2/repository/org/apache/spark/spark-tags_2.11/2.2.1/spark-tags_2.11-2.2.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/lydia/.m2/repository/org/apache/spark/spark-launcher_2.11/2.2.1/spark-launcher_2.11-2.2.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/lydia/.m2/repository/org/apache/spark/spark-core_2.11/2.2.1/spark-core_2.11-2.2.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/lydia/.m2/repository/org/apache/spark/spark-mllib_2.11/2.2.1/spark-mllib_2.11-2.2.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/lydia/Téléchargements/opencsv-4.0.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/lydia/Téléchargements/weka-dev-3.7.10.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/lydia/Téléchargements/pentaho.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/lydia/Téléchargements/renjin-script-engine-0.9.2615-jar-with-dependencies.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>

@@ -36,13 +36,17 @@ public class SparkMLLib extends Library{
 		categories = new HashMap<Integer,ArrayList<String>>();
 		
 		// Chemin des fichiers dédié à SparkMl
-		String testFile = "src/main/resources/test_spark.csv";
-		String trainFile = "src/main/resources/train_spark.csv";
+		
+		String testFile = data.getTestingPath();
+		String trainFile = data.getTrainingPath();
+		
+		String newtestFile = testFile.substring(0, testFile.length()-4)+"_test_spark.csv";
+		String newtrainFile = trainFile.substring(0, trainFile.length()-4)+"_train_spark.csv";
 
 		/* On va modifier les tables csv pour convenir au format Pour test et train notamment transformer la variable catégoriel d'interet en 1.0,2.0,3.0*/
 
-		transformColumn(data.getTestingPath(),testFile);
-		transformColumn(data.getTrainingPath(),trainFile);
+		transformColumn(trainFile,newtrainFile);
+		transformColumn(testFile,newtestFile);
 
 		// On cree une instance de sparkML 
 		sparkMl = new AlgoSparkML(testFile,trainFile,categories.size());

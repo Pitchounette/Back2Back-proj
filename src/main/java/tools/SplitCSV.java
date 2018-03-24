@@ -24,6 +24,9 @@ public class SplitCSV {
 	private String name;
 	List<String[]> dataTable = new ArrayList<String[]>(); // The full dataset
 	
+	String trainFile;
+	String testFile;
+	
 	// Constructor of the class that import the dataset at the position path and split it
 	public SplitCSV(String path,String name) throws IOException {
 		this.path = path;
@@ -34,11 +37,11 @@ public class SplitCSV {
 	}
 	
 	public String getTrainingPath() {
-		return("src/main/resources/train_"+this.name+".csv");
+		return this.trainFile;
 	}
 	
 	public String getTestingPath() {
-		return("src/main/resources/test_"+this.name+".csv");
+		return this.testFile;
 	}
 	
 	// Import the data set 
@@ -63,10 +66,7 @@ public class SplitCSV {
 		List<String[]> train = dataTable.subList(0, nbrtrain); 
 		train.add(0, header);
 		
-		String trainFile = path.substring(0, path.length()-5)+"train_"+this.name+".csv";
-		/*CSVWriter writerTrain = new CSVWriter(new FileWriter(trainFile),',','\0');
-        writerTrain.writeAll(train);
-        writerTrain.close();*/
+		this.trainFile = path.substring(0, path.length()-4)+"train_"+this.name+".csv";
 		
 		CSVWriter writerTrain = new CSVWriter(new FileWriter(trainFile),',','\0');
         writerTrain.writeAll(train);
@@ -74,7 +74,7 @@ public class SplitCSV {
 		
         List<String[]> test = dataTable.subList(nbrtrain+1, dataTable.size());
 		test.add(0,header);
-		String testFile = path.substring(0, path.length()-5)+"test_"+this.name+".csv";
+		this.testFile = path.substring(0, path.length()-4)+"test_"+this.name+".csv";
 		CSVWriter writerTest = new CSVWriter(new FileWriter(testFile),',','\0');
         writerTest.writeAll(test);
         writerTest.close();

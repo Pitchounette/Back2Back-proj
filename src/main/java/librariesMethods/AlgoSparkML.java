@@ -4,19 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.parquet.io.RecordReader;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
-import org.apache.spark.api.java.function.VoidFunction;
-import org.apache.spark.ml.classification.RandomForestClassifier;
-import org.apache.spark.ml.feature.PCA;
-import org.apache.spark.ml.feature.StringIndexer;
-import org.apache.spark.ml.feature.StringIndexerModel;
-import org.apache.spark.ml.feature.VectorIndexer;
-import org.apache.spark.ml.feature.VectorIndexerModel;
 import org.apache.spark.mllib.classification.SVMModel;
 import org.apache.spark.mllib.classification.SVMWithSGD;
 import org.apache.spark.mllib.linalg.Vector;
@@ -26,22 +20,11 @@ import org.apache.spark.mllib.tree.DecisionTree;
 import org.apache.spark.mllib.tree.RandomForest;
 import org.apache.spark.mllib.tree.model.DecisionTreeModel;
 import org.apache.spark.mllib.tree.model.RandomForestModel;
-import org.apache.spark.mllib.util.MLUtils;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SQLContext;
-import org.apache.spark.sql.types.DataTypes;
-import org.apache.spark.sql.types.Metadata;
-import org.apache.spark.sql.types.StructField;
-import org.apache.spark.sql.types.StructType;
 
 import scala.Tuple2;
-import org.apache.spark.SparkConf;
-import org.apache.log4j.Logger;
-import org.apache.log4j.Level;
-
-
-
 
 public class AlgoSparkML implements java.io.Serializable{
 
@@ -188,7 +171,7 @@ public class AlgoSparkML implements java.io.Serializable{
 
 		// Evaluate model on test instances and compute test error
 		JavaPairRDD<Double, Double> predictionAndLabel =
-				dataTest.mapToPair(p -> new Tuple2<>(model.predict(p.features()), p.label()));
+				dataTest.mapToPair(p -> new Tuple2<>(model.predict( p.features()), p.label()));
 		double testErr =
 				predictionAndLabel.filter(pl -> !pl._1().equals(pl._2())).count() / (double) dataTest.count();
 
@@ -207,7 +190,7 @@ public class AlgoSparkML implements java.io.Serializable{
 
 		// Compute raw scores on the test set.
 		JavaRDD<Tuple2<Object, Object>> scoreAndLabels = dataTest.map(p ->
-		new Tuple2<>(model.predict(p.features()), p.label()));
+		new Tuple2<>(model.predict((JavaRDD<Vector>) p.features()), p.label()));
 		double testErr =
 				scoreAndLabels.filter(pl -> !pl._1().equals(pl._2())).count() / (double) dataTest.count();
 

@@ -13,6 +13,7 @@ public class WekaLib extends Library  {
 		super(data, methode);
 		try {
 			weka = new LibWeka(data.getTestingPath(),data.getTrainingPath(),false);
+			System.out.println(weka);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
