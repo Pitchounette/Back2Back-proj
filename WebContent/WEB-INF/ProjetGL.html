@@ -22,7 +22,7 @@ function printParameters(method,numCol) {
 		numTreesLabel.style.display="none";
     }
 	
-	if(selected === "J48"){
+	if(selected === "SVM"){
 		maxDepth.style.display ="none";
 		maxDepthLabel.style.display ="none";
 		numTrees.style.display ="none";
@@ -48,7 +48,7 @@ function printMethod(library,numCol) {
 		randomForest.style.display ="block";
     }
 	if(selected === "weka"){
-		J48.style.display ="block";
+		J48.style.display ="none";
 		decisionTree.style.display ="block";
 		randomForest.style.display ="block";
     }

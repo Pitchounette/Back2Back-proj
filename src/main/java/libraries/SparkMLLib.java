@@ -39,10 +39,10 @@ public class SparkMLLib extends Library{
 		
 		String testFile = data.getTestingPath();
 		String trainFile = data.getTrainingPath();
-		
+		System.out.println(testFile);
 		String newtestFile = testFile.substring(0, testFile.length()-4)+"_test_spark.csv";
 		String newtrainFile = trainFile.substring(0, trainFile.length()-4)+"_train_spark.csv";
-
+		System.out.println(newtestFile);
 		/* On va modifier les tables csv pour convenir au format Pour test et train notamment transformer la variable catégoriel d'interet en 1.0,2.0,3.0*/
 
 		transformColumn(trainFile,newtrainFile);
@@ -50,17 +50,12 @@ public class SparkMLLib extends Library{
 
 		// On cree une instance de sparkML 
 		sparkMl = new AlgoSparkML(testFile,trainFile,categories.size());
-
-
 	}
 	
-	
-
 	// Write a new csv file that contain the same information that the one at pathIn but change the column where there is qualitative variables
 	// By transforming the modalites into 1.0,2.0,3.0 ...
 
 	private void transformColumn(String pathIn, String pathOut) throws IOException {
-		
 		// Import the dataset at path IN
 		File file = new File(pathIn);
 		List<String[]> dataTable = new ArrayList<String[]>();
@@ -71,7 +66,6 @@ public class SparkMLLib extends Library{
 			String[] values = line.split(",");
 			dataTable.add(values); 
 		}
-
 		// Apres avoir charger le CSV on le modifie
 
 		// Stock all the unique  value of each column in the dataset
@@ -79,7 +73,6 @@ public class SparkMLLib extends Library{
 		createCategories(header.length); // Create the map in which we will put all the unique value
 		for(int i =0; i < header.length;i++) { // For each column add the unique value into the categories map
 			this.findCategories(dataTable,i); //
-			
 		}
 		
 		// For each column, if it has less than 4 differents unique value, we assume it is qualitative and transform the column 
@@ -91,12 +84,10 @@ public class SparkMLLib extends Library{
 			}
 		}
 
-
 		// Write the new CSV file in the pathOut
 		CSVWriter writerTest = new CSVWriter(new FileWriter(pathOut));
 		writerTest.writeAll(dataTable);
 		writerTest.close();
-
 	}
 
 

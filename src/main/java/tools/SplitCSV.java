@@ -12,7 +12,6 @@ import java.util.List;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
-
 /*
  * Split CSV is a data structure that is used to have the same learning and test set when we compare different methods
  */

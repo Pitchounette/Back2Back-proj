@@ -74,8 +74,7 @@ public class AlgoSparkML implements java.io.Serializable{
 
 		// Transform the JavaRDD<Row> for the test data into a JavaRDD<LabelPoint>
 
-		this.dataTest = testDataInput.map(new Function<Row,
-				LabeledPoint>() {
+		this.dataTest = testDataInput.map(new Function<Row,	LabeledPoint>() {
 			public LabeledPoint call(Row line) throws Exception {
 				String lineAsString=line.toString();
 				lineAsString = lineAsString.replace("[","");
@@ -97,8 +96,7 @@ public class AlgoSparkML implements java.io.Serializable{
 		});
 
 		// Transform the JavaRDD<Row> for the train data into a JavaRDD<LabelPoint>
-		this.dataTrain = trainDataInput.map(new Function<Row,
-				LabeledPoint>() {
+		this.dataTrain = trainDataInput.map(new Function<Row, LabeledPoint>() {
 			public LabeledPoint call(Row line) throws Exception {
 				String lineAsString=line.toString();
 				lineAsString = lineAsString.replace("[","");
@@ -106,7 +104,6 @@ public class AlgoSparkML implements java.io.Serializable{
 				String[] fields =lineAsString.split(",");
 				double[] res = new double[fields.length-1];
 				for(int i =0;i < fields.length-1;i++) {
-
 					res[i] = (Double.parseDouble(fields[i]));
 				}
 

@@ -39,8 +39,8 @@ public class Test extends HttpServlet {
 
 	public String library1;	
 	public String methodeLibrary1=null;
-	public String maxDepth1=null;
-	public String numTrees1=null;
+	public String maxDepth1;
+	public String numTrees1;
 
 	public String library2= null;
 	public String methodeLibrary2=null;
@@ -66,9 +66,18 @@ public class Test extends HttpServlet {
 
 
 	public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-		String hasImport = request.getParameter("import");
-		System.out.println(hasImport);
-		filePath=request.getServletContext().getRealPath("")+"/WEB-INF/iris.csv";
+		
+		
+		hasImport = request.getParameter("import");
+		fileName = request.getParameter("file");
+		
+
+		if (hasImport == "noimport") {
+			filePath=request.getServletContext().getRealPath("")+"WEB-INF/"+fileName;
+		} else {
+			System.out.println(fileName);
+		}
+		
 		split = new SplitCSV(filePath, "test");
 
 		library1= request.getParameter("library1");
@@ -81,32 +90,46 @@ public class Test extends HttpServlet {
 		maxDepth2=request.getParameter("maxDepth2");
 		numTrees2= request.getParameter("numTrees2");
 
-
-
+		Map<String,String> args1= new HashMap<String,String>();
+		Map<String,String> args2= new HashMap<String,String>();
+		if (maxDepth1 != null) {
+			args1.put("maxDepth", maxDepth1);
+		}
+		if (maxDepth2 != null) {
+			args2.put("maxDepth", maxDepth2);
+		}
+		if (numTrees1 != null) {
+			args1.put("numTrees", numTrees1);
+		}
+		if (maxDepth2 != null) {
+			args2.put("numTrees", numTrees2);
+		}
 		//HashMap arguments1 = new HashMap<String,String>();
 		//arguments1.put("indY", "19");
 
 		//HashMap arguments2 = new HashMap<String,String>();
 		System.out.println(this.library1);
 		switch (this.library1) {
-		case "sparkml": lib1 = calculSparkML();
+		case "sparkml": lib1 = calculSparkML(args1);
 		break;
-		case "renjin": lib1 = calculRenjin();
+		case "renjin": lib1 = calculRenjin(args1);
 		break;
-		case "weka":lib1 = calculWeka();
+		case "weka":lib1 = calculWeka(args1);
 		break;
 		}
-		System.out.println(lib1);
-
+		
 		System.out.println("je suis allée jusque là 1");
 		switch (this.library2) {
-		case "sparkml": lib2 = calculSparkML();
+		case "sparkml": lib2 = calculSparkML(args2);
 		break;
-		case "renjin": lib2 = calculRenjin();
+		case "renjin": lib2 = calculRenjin(args2);
 		break;
-		case "weka": lib2 = calculWeka();
+		case "weka": lib2 = calculWeka(args2);
 		break;
 		}
+		
+
+		System.out.println(this.lib2.getAccuracy());
 
 		request.setAttribute("lib1", this.lib1);
 		request.setAttribute("method1", this.methodeLibrary1);
@@ -119,22 +142,9 @@ public class Test extends HttpServlet {
 		getServletContext().getRequestDispatcher("/WEB-INF/bonjour.jsp").forward(request, response);
 	}
 
-	private Library calculWeka() {
-		Library libRF = new WekaLib(this.split,Methode.RANDOMFOREST);
-		Library libDT = new WekaLib(this.split,Methode.DECISIONTREE);
-		Library libSVM = new WekaLib(this.split,Methode.SVM);
-		switch (this.methodeLibrary1) {
-		case "randomForest": return libRF;
-		case "decisionTree": return libDT;
-		case "J48": return libSVM;
-		default : return null ;
-		}
-	}
-
-
-	private Library calculRenjin() {
-		Library libRF = new RenjinLib(this.split,Methode.RANDOMFOREST);
-		Library libDT = new RenjinLib(this.split,Methode.DECISIONTREE);
+	private Library calculWeka(Map<String,String> args) {
+		Library libRF = new WekaLib(this.split,Methode.RANDOMFOREST,args);
+		Library libDT = new WekaLib(this.split,Methode.DECISIONTREE,args);
 		switch (this.methodeLibrary1) {
 		case "randomForest": return libRF;
 		case "decisionTree": return libDT;
@@ -143,9 +153,20 @@ public class Test extends HttpServlet {
 	}
 
 
-	private Library calculSparkML() throws IOException {
-		Library libRF = new SparkMLLib(this.split,Methode.RANDOMFOREST);
-		Library libDT = new SparkMLLib(this.split,Methode.DECISIONTREE);
+	private Library calculRenjin(Map<String,String> args) {
+		Library libRF = new RenjinLib(this.split,Methode.RANDOMFOREST,args);
+		Library libDT = new RenjinLib(this.split,Methode.DECISIONTREE, args);
+		switch (this.methodeLibrary1) {
+		case "randomForest": return libRF;
+		case "decisionTree": return libDT;
+		default : return null ;
+		}
+	}
+
+
+	private Library calculSparkML(Map<String,String> args) throws IOException {
+		Library libRF = new SparkMLLib(this.split,Methode.RANDOMFOREST, args);
+		Library libDT = new SparkMLLib(this.split,Methode.DECISIONTREE, args);
 		switch (this.methodeLibrary1) {
 		case "randomForest": return libRF;
 		case "decisionTree": return libDT;

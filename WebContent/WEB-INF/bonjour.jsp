@@ -12,20 +12,20 @@
 <h1>Results : </h1>
   </div>
 
-Algo 1 :
+Algorithme 1 :
 <pre></pre>
-${library1}
+Librairie = ${library1}
 <pre></pre>
-${method1}
+Méthode = ${method1}
 <pre></pre>
 Accuracy = ${acc1}
 <pre></pre>
 
 Algo 2 :
 <pre></pre>
-${library2}
+Librairie = ${library2}
 <pre></pre>
-${method2}
+Méthode = ${method2}
 <pre></pre>
 Accuracy = ${acc2}
 </body>
