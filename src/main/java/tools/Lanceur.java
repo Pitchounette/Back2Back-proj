@@ -3,8 +3,7 @@ package tools;
 import java.io.IOException;
 import java.util.HashMap;
 
-import libraries.WekaLib;
-
+import libraries.*;
 /* Cette classe permet de lancer les programmes il contient des exemples d'utilisation de notre projet
  * 
  * 

@@ -7,7 +7,6 @@ import librariesMethods.LibWeka;
 import tools.SplitCSV;
 import weka.classifiers.trees.J48;
 import weka.classifiers.trees.RandomForest;
-import Library;
 
 public class WekaLib extends Library  {
 
@@ -37,7 +36,7 @@ public class WekaLib extends Library  {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}La
+		}
 		
 	}
 
