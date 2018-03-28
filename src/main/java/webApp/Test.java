@@ -32,36 +32,47 @@ import au.com.bytecode.opencsv.*;
 
 @WebServlet("/Test")
 public class Test extends HttpServlet {
-	public static final String VUE = "/WEB-INF/ProjetGL.html";
+	
+	
+	/*  Form attributes  */
+	// doGET
+	public static final String 
+		VUE = "/WEB-INF/ProjetGL.html";
 
+	// general attributes
 	public String hasImport;
 	public String fileName;
 
+	
+	// attributes for library 1
 	public String library1;	
 	public String methodeLibrary1=null;
 	public String maxDepth1;
 	public String numTrees1;
 
+	
+	// attributes for library 2
 	public String library2= null;
 	public String methodeLibrary2=null;
 	public String maxDepth2=null;
 	public String numTrees2= null;
 
-
-	/* FILE */
-	private boolean isMultipart;
+	// FILE
 	private String filePath= null;
-	private int maxFileSize = 50 * 1024;
-	private int maxMemSize = 4 * 1024;
-	private File file ;
+	
+	/*  Java attributes  */
 	public SplitCSV split;
-
 	public Library lib1= null;	
 	public Library lib2= null;	
 
-	public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-		/* Affichage de la page d'inscription */
-		this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );
+	public void doGet( 
+			HttpServletRequest request, 
+			HttpServletResponse response ) 
+			throws ServletException, IOException {
+		/* Displays the form */
+		this.getServletContext().
+			getRequestDispatcher( VUE ).
+			forward( request, response );
 	}
 
 	public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -76,7 +87,7 @@ public class Test extends HttpServlet {
 		} else {
 			filePath=fileName;
 		}
-		
+		String scriptPath = request.getServletContext().getRealPath("")+"WEB-INF/scriptR.R";
 		//filePath=request.getServletContext().getRealPath("")+"WEB-INF/iris.csv";
 		split = new SplitCSV(filePath, "test");
 
@@ -113,7 +124,7 @@ public class Test extends HttpServlet {
 		switch (this.library1) {
 		case "sparkml": lib1 = calculSparkML(args1);
 		break;
-		case "renjin": lib1 = calculRenjin(args1);
+		case "renjin": lib1 = calculRenjin(args1,scriptPath);
 		break;
 		case "weka":lib1 = calculWeka(args1);
 		break;
@@ -122,7 +133,7 @@ public class Test extends HttpServlet {
 		switch (this.library2) {
 		case "sparkml": lib2 = calculSparkML(args2);
 		break;
-		case "renjin": lib2 = calculRenjin(args2);
+		case "renjin": lib2 = calculRenjin(args2,scriptPath);
 		break;
 		case "weka": lib2 = calculWeka(args2);
 		break;
@@ -139,7 +150,8 @@ public class Test extends HttpServlet {
 		request.setAttribute("method2", this.methodeLibrary2);
 		request.setAttribute("acc2", this.lib2.getAccuracy());
 
-		getServletContext().getRequestDispatcher("/WEB-INF/bonjour.jsp").forward(request, response);
+		getServletContext().getRequestDispatcher("/WEB-INF/bonjour.jsp").
+			forward(request, response);
 	}
 
 	private Library calculWeka(Map<String,String> args) {
@@ -153,9 +165,9 @@ public class Test extends HttpServlet {
 	}
 
 
-	private Library calculRenjin(Map<String,String> args) {
-		Library libRF = new RenjinLib(this.split,Methode.RANDOMFOREST,args);
-		Library libDT = new RenjinLib(this.split,Methode.DECISIONTREE, args);
+	private Library calculRenjin(Map<String,String> args, String scriptPath) throws IOException {
+		Library libRF = new RenjinLib(this.split,Methode.RANDOMFOREST,args,scriptPath);
+		Library libDT = new RenjinLib(this.split,Methode.DECISIONTREE, args,scriptPath);
 		switch (this.methodeLibrary1) {
 		case "randomForest": return libRF;
 		case "decisionTree": return libDT;
@@ -174,73 +186,5 @@ public class Test extends HttpServlet {
 		}
 	}
 
-
-	public void getFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		filePath = getServletContext().getInitParameter("file-upload");
-		isMultipart = ServletFileUpload.isMultipartContent(request);
-		response.setContentType("text/html");
-		java.io.PrintWriter out = response.getWriter( );
-
-		if( !isMultipart ) {
-			out.println("<html>");
-			out.println("<head>");
-			out.println("<title>Servlet upload</title>");  
-			out.println("</head>");
-			out.println("<body>");
-			out.println("<p>No file uploaded</p>"); 
-			out.println("</body>");
-			out.println("</html>");
-			return;
-		}
-
-		DiskFileItemFactory factory = new DiskFileItemFactory();
-
-		// maximum size that will be stored in memory
-		factory.setSizeThreshold(maxMemSize);
-		// Location to save data that is larger than maxMemSize.
-		factory.setRepository(new File("c:\\temp"));
-		// Create a new file upload handler
-		ServletFileUpload upload = new ServletFileUpload(factory);
-		// maximum file size to be uploaded.
-		upload.setSizeMax( maxFileSize );
-		try { 
-			// Parse the request to get file items.
-			List fileItems = upload.parseRequest((RequestContext) request);
-
-			// Process the uploaded file items
-			Iterator i = fileItems.iterator();
-
-			out.println("<html>");
-			out.println("<head>");
-			out.println("<title>Servlet upload</title>");  
-			out.println("</head>");
-			out.println("<body>");
-
-			while ( i.hasNext () ) {
-				FileItem fi = (FileItem)i.next();
-				if ( !fi.isFormField () ) {
-					// Get the uploaded file parameters
-					String fieldName = fi.getFieldName();
-					String fileName = fi.getName();
-					String contentType = fi.getContentType();
-					boolean isInMemory = fi.isInMemory();
-					long sizeInBytes = fi.getSize();
-
-					// Write the file
-					if( fileName.lastIndexOf("\\") >= 0 ) {
-						file = new File( filePath + fileName.substring( fileName.lastIndexOf("\\"))) ;
-					} else {
-						file = new File( filePath + fileName.substring(fileName.lastIndexOf("\\")+1)) ;
-					}
-					fi.write( file ) ;
-					out.println("Uploaded Filename: " + fileName + "<br>");
-				}
-			}
-			out.println("</body>");
-			out.println("</html>");
-		} catch(Exception ex) {
-			System.out.println(ex);
-		}
-	}
 
 }

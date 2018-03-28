@@ -79,7 +79,7 @@ public class LibWeka {
 		Evaluation eval = new Evaluation(this.train);
 		eval.evaluateModel(tree, this.test);
 
-		return eval.pctCorrect();
+		return 1-eval.pctCorrect()/100;
 	}
 	
 	public static void main(String[] args) throws Exception {

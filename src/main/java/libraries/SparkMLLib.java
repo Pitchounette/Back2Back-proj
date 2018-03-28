@@ -47,7 +47,7 @@ public class SparkMLLib extends Library{
 		transformColumn(testFile,newtestFile);
 
 		// On cree une instance de sparkML 
-		sparkMl = new AlgoSparkML(testFile,trainFile,categories.size());
+		sparkMl = new AlgoSparkML(newtestFile,newtrainFile,categories.size());
 	}
 	
 	// Write a new csv file that contain the same information that the one at pathIn but change the column where there is qualitative variables
@@ -75,7 +75,7 @@ public class SparkMLLib extends Library{
 		
 		// For each column, if it has less than 4 differents unique value, we assume it is qualitative and transform the column 
 		for(int col =0; col< header.length;col++) {
-			if(categories.get(col).size() < 4) {
+			if(categories.get(col).size() < 10) {
 				for(int i=0;i<dataTable.size();i++) {
 						dataTable.get(i)[col] = String.valueOf((double) 1+categories.get(col).indexOf(dataTable.get(i)[col])); // Replace the value by the index of the value into the list of the different value of the column
 				}

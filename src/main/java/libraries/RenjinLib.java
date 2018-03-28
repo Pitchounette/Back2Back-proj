@@ -1,5 +1,7 @@
 package libraries;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +10,7 @@ import librariesMethods.LibWeka;
 import tools.SplitCSV;
 import weka.classifiers.trees.J48;
 import weka.classifiers.trees.RandomForest;
+import weka.core.converters.CSVLoader;
 
 public class RenjinLib extends Library {
 	
@@ -15,35 +18,28 @@ public class RenjinLib extends Library {
 	private Map<String,String> usedArgs;
 	private Map<String,String> args;
 	
-	public RenjinLib(SplitCSV data, Methode methode, Map<String,String> args) {
+	public RenjinLib(SplitCSV data, Methode methode, Map<String,String> args,String scriptPath) throws IOException {
 		super(data, methode);
 		try {
-			renjin = new LibRenjin(data.getTestingPath(),data.getTrainingPath());
+			renjin = new LibRenjin(data.getTestingPath(),data.getTrainingPath(),scriptPath);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.args=args;
+		File fileTest = new File(data.getTestingPath());
+		CSVLoader loaderTest = new CSVLoader();
+		loaderTest.setSource(fileTest);
+		int Y = loaderTest.getDataSet().numAttributes() - 1;
+		args.put("indY", String.valueOf(Y));
 		usedArgs = new HashMap<String,String>();
 		usedArgs.put("ntree", "200");
 		usedArgs.put("mtry", "4");
 		usedArgs.put("transform", "true");
 		usedArgs.put("minbucket", "10");
 	}
-	public RenjinLib(SplitCSV data, Methode methode) {
-		super(data, methode);
-		try {
-			renjin = new LibRenjin(data.getTestingPath(),data.getTrainingPath());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		this.args= new HashMap<String,String>();
-		usedArgs = new HashMap<String,String>();
-		usedArgs.put("ntree", "200");
-		usedArgs.put("mtry", "4");
-		usedArgs.put("transform", "true");
-		usedArgs.put("minbucket", "10");
+	public RenjinLib(SplitCSV data, Methode methode, String scriptPath) throws IOException {
+		this(data, methode, new HashMap<String,String>(),scriptPath);
 	}
 	
 	@Override

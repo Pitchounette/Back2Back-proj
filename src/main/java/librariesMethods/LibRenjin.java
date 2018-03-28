@@ -15,20 +15,24 @@ public class LibRenjin {
 	public ScriptEngine engine;
 	public String train;
 	public String test;
+	public String script;
 	private static Methode array[]= {Methode.DECISIONTREE, Methode.RANDOMFOREST};
 	static public ArrayList<Methode> allowedMethods = new ArrayList<Methode>(Arrays.asList(array)) ;
 	
-	public LibRenjin(String test, String train) {
+	public LibRenjin(String test, String train, String scriptPath) {
 		
 		RenjinScriptEngineFactory factory = new RenjinScriptEngineFactory();
 		
 		this.engine = factory.getScriptEngine();
 		this.train=train;
 		this.test=test;
+		this.script=scriptPath;
 	}
 	
 	public double treeAccuracy(int indY, int minBucket, boolean transform) throws Exception {
-		this.engine.eval(new java.io.FileReader("src/main/resources/scriptR.R"));
+		System.out.println("Working Directory = " +
+	              System.getProperty("user.dir"));
+		this.engine.eval(new java.io.FileReader(script));
 		engine.put("repertoireTrain",this.train);
 		engine.put("repertoireTest",this.test);
 		engine.put("indY",indY);
@@ -39,7 +43,9 @@ public class LibRenjin {
 	}
 	
 	public double randomForestAccuracy(int indY, int ntree, int mtry, boolean transform) throws Exception {
-		this.engine.eval(new java.io.FileReader("src/main/resources/scriptR.R"));
+		System.out.println("Working Directory = " +
+	              System.getProperty("user.dir"));
+		this.engine.eval(new java.io.FileReader(script));
 		engine.put("repertoireTrain",this.train);
 		engine.put("repertoireTest",this.test);
 		engine.put("indY", indY);
