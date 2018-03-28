@@ -87,6 +87,7 @@ public class Test extends HttpServlet {
 		} else {
 			filePath=fileName;
 		}
+		System.out.println(fileName);
 		String scriptPath = request.getServletContext().getRealPath("")+"WEB-INF/scriptR.R";
 		//filePath=request.getServletContext().getRealPath("")+"WEB-INF/iris.csv";
 		split = new SplitCSV(filePath, "test");
