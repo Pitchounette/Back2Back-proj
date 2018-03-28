@@ -69,14 +69,15 @@ public class Test extends HttpServlet {
 		
 		hasImport = request.getParameter("import");
 		fileName = request.getParameter("file");
-		
+		System.out.println(fileName);
 
 		if (hasImport == "noimport") {
 			filePath=request.getServletContext().getRealPath("")+"WEB-INF/"+fileName;
 		} else {
-			System.out.println(fileName);
+			filePath=fileName;
 		}
 		
+		//filePath=request.getServletContext().getRealPath("")+"WEB-INF/iris.csv";
 		split = new SplitCSV(filePath, "test");
 
 		library1= request.getParameter("library1");
@@ -89,6 +90,8 @@ public class Test extends HttpServlet {
 		maxDepth2=request.getParameter("maxDepth2");
 		numTrees2= request.getParameter("numTrees2");
 
+		System.out.println(maxDepth1+" "+maxDepth2+" "+numTrees1+" "+numTrees2);
+		
 		Map<String,String> args1= new HashMap<String,String>();
 		Map<String,String> args2= new HashMap<String,String>();
 		if (maxDepth1 != null) {
@@ -107,7 +110,6 @@ public class Test extends HttpServlet {
 		//arguments1.put("indY", "19");
 
 		//HashMap arguments2 = new HashMap<String,String>();
-		System.out.println(this.library1);
 		switch (this.library1) {
 		case "sparkml": lib1 = calculSparkML(args1);
 		break;
@@ -117,7 +119,6 @@ public class Test extends HttpServlet {
 		break;
 		}
 		
-		System.out.println("je suis allée jusque là 1");
 		switch (this.library2) {
 		case "sparkml": lib2 = calculSparkML(args2);
 		break;
@@ -128,13 +129,13 @@ public class Test extends HttpServlet {
 		}
 		
 
-		System.out.println(this.lib2.getAccuracy());
+		System.out.println(this.lib2+" "+this.lib1);
 
-		request.setAttribute("lib1", this.lib1);
+		request.setAttribute("library1", this.library1);
 		request.setAttribute("method1", this.methodeLibrary1);
 		request.setAttribute("acc1", this.lib1.getAccuracy());
 
-		request.setAttribute("lib2", this.lib2);
+		request.setAttribute("library2", this.library2);
 		request.setAttribute("method2", this.methodeLibrary2);
 		request.setAttribute("acc2", this.lib2.getAccuracy());
 

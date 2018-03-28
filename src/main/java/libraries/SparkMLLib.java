@@ -39,10 +39,8 @@ public class SparkMLLib extends Library{
 		
 		String testFile = data.getTestingPath();
 		String trainFile = data.getTrainingPath();
-		System.out.println(testFile);
 		String newtestFile = testFile.substring(0, testFile.length()-4)+"_test_spark.csv";
 		String newtrainFile = trainFile.substring(0, trainFile.length()-4)+"_train_spark.csv";
-		System.out.println(newtestFile);
 		/* On va modifier les tables csv pour convenir au format Pour test et train notamment transformer la variable catégoriel d'interet en 1.0,2.0,3.0*/
 
 		transformColumn(trainFile,newtrainFile);

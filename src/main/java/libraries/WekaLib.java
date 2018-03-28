@@ -19,7 +19,7 @@ public class WekaLib extends Library  {
 		super(data, methode);
 		try {
 			weka = new LibWeka(data.getTestingPath(),data.getTrainingPath(),false);
-			System.out.println(weka);
+			//System.out.println(weka);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -31,7 +31,7 @@ public class WekaLib extends Library  {
 		super(data, methode);
 		try {
 			weka = new LibWeka(data.getTestingPath(),data.getTrainingPath(),false);
-			System.out.println(weka);
+			//System.out.println(weka);
 			this.args=args;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -54,13 +54,13 @@ public class WekaLib extends Library  {
 				RandomForest rf;
 				try { // Faire appel à chaque modèle statistique ici? Qu'en est il de celles qui ont des paramètres?
 					rf = weka.randomForest();
-					if(!this.args.isEmpty()) {
+					/*if(!this.args.isEmpty()& args.get("maxDepth")!=null) {
 						int max = Integer.parseInt(args.get("maxDepth"));
 						int nbTree = Integer.parseInt(args.get("NumTrees"));
 						rf.setMaxDepth(max);
 						rf.setNumTrees(nbTree);
 					}
-					
+					*/
 					accuracy =  weka.accuracy(rf);
 				} catch (Exception e) {
 					System.out.println("Error during calcul, accuracy = 0");
@@ -72,10 +72,10 @@ public class WekaLib extends Library  {
 				J48 dt;
 				try { // Faire appel à chaque modèle statistique ici? Qu'en est il de celles qui ont des paramètres?
 					dt = weka.decisionTree();
-					if(this.args!=null) {
-						int max = Integer.parseInt(args.get("maxDepth"));
+					//if(this.args.isEmpty()) {
+					//	int max = Integer.parseInt(args.get("maxDepth"));
 						//dt.set;
-					}
+					//}
 					accuracy =  weka.accuracy(dt);
 				} catch (Exception e) {
 					System.out.println("Error during calcul, accuracy = 0");
