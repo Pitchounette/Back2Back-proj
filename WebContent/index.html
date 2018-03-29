@@ -6,7 +6,26 @@
     </head>
 
     <body>
-        <p>Welcome to our ML-Libraries comparator!</p>
-        <a class="stylebouton" href="http://localhost:8080/Back2Back-proj/comparateur">Start comparing</a>
+        <p align ="center">
+        	Welcome to our ML-Libraries comparator!
+        	</br>
+        	</br>
+        	<img src = "./images/Statistiques.jpg" alt = ""/>
+        	</br>
+        	</br>
+        	<input type ="button" value  = "Start comparing">
+        </p>
+        </br>
+        
+        <script type ="text/javascript">
+        
+        	var btn = document.querySelector ("input");
+        	btn.addEventListener('click', redirection);
+        	
+        	function redirection(){
+        		document.location.href ="http://localhost:8080/Back2Back-proj/comparateur";
+        	}
+        </script>
+        
     </body>
 </html>

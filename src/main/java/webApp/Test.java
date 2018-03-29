@@ -37,7 +37,7 @@ public class Test extends HttpServlet {
 	/*  Form attributes  */
 	// doGET
 	public static final String 
-		VUE = "/WEB-INF/ProjetGL.html";
+		VUE = "/WEB-INF/ProjetGL2.html";
 
 	// general attributes
 	public String hasImport;
