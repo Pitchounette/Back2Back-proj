@@ -160,7 +160,7 @@ public class Test extends HttpServlet {
 		Library libDT = new WekaLib(this.split,Methode.DECISIONTREE,args);
 		switch (this.methodeLibrary1) {
 		case "randomForest": return libRF;
-		case "decisionTree": return libDT;
+		case "J48": return libDT;
 		default : return null ;
 		}
 	}
